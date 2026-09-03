@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,480;0,9..144,600;1,9..144,480&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parch:#F4EFE4; --warm:#ECE4D1; --panel:#FFFDF8;
+  --ink:#20242B; --ink2:#5B5647; --ink3:#8A8570;
+  --teal:#1F4C4A; --tealD:#163837; --gold:#D99A2B; --jac:#6B5299; --rust:#A85A3B;
+  --good:#2F5C3B; --line:#DCD2BA; --r:12px; --r2:16px;
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--parch);color:var(--ink);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--tealD)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- typography ---------- */
+.h1{font-family:var(--serif);font-weight:480;font-size:31px;line-height:1.14;letter-spacing:-.01em;margin:8px 0 8px}
+.h2{font-family:var(--serif);font-weight:480;font-size:23px;line-height:1.2;letter-spacing:-.01em;margin:0 0 6px}
+.h3{font-family:var(--serif);font-weight:480;font-size:18px;margin:0 0 8px}
+.eyebrow{font-family:var(--serif);font-style:italic;font-weight:480;color:var(--jac);font-size:15px;margin:0 0 2px}
+.sub{color:var(--ink2);font-size:15px;margin:0 0 18px;max-width:56ch}
+.note{color:var(--ink3);font-size:13px;margin:6px 0 0}
+
+/* ---------- header ---------- */
+.hdr{position:sticky;top:0;z-index:30;background:rgba(244,239,228,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hdrin{max-width:1120px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--serif);font-style:italic;font-weight:600;font-size:21px;color:var(--tealD);letter-spacing:-.01em}
+.mark{width:28px;height:28px;flex:none}
+.nav{display:flex;gap:4px;margin-left:10px}
+.navb{border:none;background:transparent;font-size:14.5px;padding:8px 14px;border-radius:20px;display:flex;align-items:center;gap:7px;min-height:38px}
+.navb:hover{background:var(--warm)}
+.navb.on{background:var(--teal);color:var(--parch)}
+.navb .ct{font-size:12px;opacity:.75}
+.spacer{flex:1}
+.avatar{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--panel);font-family:var(--serif);font-size:14px;font-weight:600;color:var(--tealD);display:flex;align-items:center;justify-content:center}
+.avatar:hover{border-color:var(--teal)}
+.pwrap{position:relative}
+.menu{position:absolute;right:0;top:46px;width:262px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);box-shadow:0 14px 40px rgba(32,36,43,.14);overflow:hidden;z-index:40}
+.mhead{padding:14px 16px;border-bottom:1px solid var(--line)}
+.mhead b{display:block;font-family:var(--serif);font-weight:600;font-size:15px}
+.mhead span{font-size:12.5px;color:var(--ink3)}
+.menui{display:flex;width:100%;align-items:center;gap:10px;padding:11px 16px;border:none;background:none;text-align:left;font-size:14px;min-height:44px}
+.menui:hover{background:var(--warm)}
+.menui .k{margin-left:auto;font-size:12px;color:var(--ink3)}
+.mdiv{height:1px;background:var(--line)}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1120px;margin:0 auto;padding:26px 22px 90px}
+.center{max-width:620px;margin:0 auto;padding:38px 22px 80px}
+
+/* ---------- chips ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:transparent;border-radius:20px;padding:8px 14px;font-size:14px;min-height:38px;display:inline-flex;align-items:center;gap:7px}
+.chip:hover{border-color:var(--teal)}
+.chip.on{background:var(--teal);border-color:var(--teal);color:var(--parch)}
+.chip.sm{font-size:13px;padding:6px 12px;min-height:34px}
+.crow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.clabel{font-size:12.5px;color:var(--ink3);margin-right:2px}
+
+/* ---------- buttons ---------- */
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 16px;font-size:14.5px;min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{border-color:var(--teal)}
+.btn.pri{background:var(--teal);border-color:var(--teal);color:var(--parch)}
+.btn.pri:hover{background:var(--tealD)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{min-height:36px;padding:7px 12px;font-size:13.5px}
+.btn.ghost{background:transparent}
+
+/* ---------- fields ---------- */
+.field{margin:0 0 20px}
+.field label{display:block;font-size:13px;color:var(--ink2);margin:0 0 8px;font-weight:500}
+.inp{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:15px;min-height:44px}
+.inp:focus{outline:2px solid var(--teal);outline-offset:1px}
+.row2{display:flex;gap:10px}
+.row2 .inp{flex:1}
+
+/* ---------- feed ---------- */
+.feedhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 16px}
+.count{font-family:var(--serif);font-size:19px;font-weight:480;margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:20px}
+.card{border:1px solid var(--line);border-radius:var(--r2);background:var(--panel);overflow:hidden;display:flex;flex-direction:column}
+.card:hover{border-color:#C9BE9F}
+.shot{position:relative;width:100%;height:152px;border:none;padding:0;background:var(--warm);display:block;overflow:hidden}
+.shot .cv{position:absolute;inset:0;width:100%;height:100%}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.shot.failed img{display:none}
+.badge{position:absolute;top:10px;right:10px;z-index:3;background:var(--gold);color:#3A2A0A;border-radius:16px;padding:4px 10px;font-size:12px;font-weight:600;display:flex;align-items:baseline;gap:3px}
+.badge i{font-style:normal;font-size:10.5px;font-weight:400}
+.flag{position:absolute;top:10px;left:10px;z-index:3;background:var(--teal);color:var(--parch);border-radius:14px;padding:4px 9px;font-size:11.5px;display:flex;align-items:center;gap:5px}
+.nosrc{position:absolute;bottom:8px;left:10px;right:10px;z-index:3;font-size:10.5px;color:rgba(255,255,255,.82)}
+.cbody{padding:14px 15px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.cat{font-size:12px;color:var(--ink3);margin:0}
+.ctitle{font-family:var(--serif);font-size:18px;font-weight:480;line-height:1.24;text-align:left;background:none;border:none;padding:0;margin:0}
+.ctitle:hover{color:var(--tealD);text-decoration:underline}
+.meta{font-size:13px;color:var(--ink2);margin:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.price{font-size:14px;font-weight:500;margin:2px 0 0}
+.warnline{font-size:12px;color:var(--rust);margin:0}
+.why{font-size:12.5px;color:var(--jac);font-style:italic;margin:2px 0 0}
+.fb{display:flex;gap:6px;margin-top:auto;padding-top:10px}
+.fbb{flex:1;border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 4px;font-size:12px;min-height:40px;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--ink2)}
+.fbb:hover{border-color:var(--teal)}
+.fbb.good{background:#DCE8DC;border-color:var(--good);color:var(--good)}
+.fbb.mid{background:#EFE6C9;border-color:#7A6420;color:#7A6420}
+.fbb.bad{background:#F0DCD3;border-color:var(--rust);color:var(--rust)}
+.empty{padding:44px 22px;text-align:center;color:var(--ink3);font-size:15px;border:1px dashed var(--line);border-radius:var(--r2)}
+
+/* ---------- modal ---------- */
+.backdrop{position:fixed;inset:0;background:rgba(32,36,43,.46);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:32px 18px;overflow-y:auto}
+.modal{background:var(--parch);border-radius:20px;max-width:580px;width:100%;padding:24px 26px 28px;position:relative;box-shadow:0 24px 70px rgba(32,36,43,.24)}
+.modal.wide{max-width:760px}
+.close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center}
+.mmedia{position:relative;height:170px;border-radius:14px;overflow:hidden;margin:0 0 16px;background:var(--warm)}
+.mmedia .cv{position:absolute;inset:0;width:100%;height:100%}
+.mmedia img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.mmedia.failed img{display:none}
+.credit{font-size:11.5px;color:var(--ink3);margin:-10px 0 14px}
+.mtitle{font-family:var(--serif);font-size:26px;font-weight:480;line-height:1.15;margin:4px 0 10px}
+.mdesc{font-size:15px;color:#4A4536;margin:0 0 18px}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;margin:0 0 18px}
+.kv.tight{gap:10px 22px}
+.kv label{display:block;font-size:11.5px;color:var(--ink3);margin:0 0 3px;text-transform:none}
+.kv p{margin:0;font-size:14.5px}
+.panelbox{background:var(--warm);border-radius:12px;padding:14px 16px;margin:0 0 16px}
+.panelbox h4{font-size:14px;margin:0 0 8px;color:var(--tealD);font-weight:500;display:flex;align-items:center;gap:7px}
+.panelbox ul{margin:0;padding-left:19px;font-size:14px}
+.panelbox li{margin:3px 0}
+.bul{margin:0;padding-left:19px;font-size:14px;color:var(--ink2)}
+.bul li{margin:4px 0}
+.simrow{display:flex;flex-wrap:wrap;gap:8px}
+.simchip{border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:7px 13px;font-size:13px;text-align:left}
+.simchip:hover{border-color:var(--teal)}
+.macts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px}
+.macts .right{margin-left:auto}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink2);background:var(--warm);border-radius:12px;padding:3px 9px}
+
+/* ---------- calibration ---------- */
+.dots{display:flex;gap:6px;margin:0 0 20px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dot.done{background:var(--jac)}
+.dot.now{background:var(--teal);transform:scale(1.35)}
+.calcard{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:var(--panel);margin:0 0 18px}
+.calmedia{position:relative;height:150px}
+.calmedia .cv{position:absolute;inset:0;width:100%;height:100%}
+.calmedia img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.calmedia.failed img{display:none}
+.calbody{padding:16px 18px 18px}
+.calacts{display:flex;gap:8px;flex-wrap:wrap}
+.calacts .btn{flex:1;min-width:120px}
+
+/* ---------- my list ---------- */
+.lsec{margin:0 0 26px}
+.lsec h4{font-family:var(--serif);font-size:17px;font-weight:480;margin:0 0 10px}
+.lrows{display:flex;flex-direction:column;gap:9px}
+.lrow{display:flex;align-items:center;gap:13px;border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--panel)}
+.lsw{width:44px;height:44px;border-radius:9px;flex:none;position:relative;overflow:hidden}
+.lsw .cv{position:absolute;inset:0;width:100%;height:100%}
+.linfo{flex:1;min-width:0}
+.linfo b{display:block;font-size:14.5px;font-weight:500}
+.linfo span{font-size:12.5px;color:var(--ink2)}
+.iconb{border:1px solid transparent;background:none;color:var(--ink3);border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex:none}
+.iconb:hover{color:var(--rust);border-color:var(--line)}
+.mine{font-size:11px;color:var(--jac);font-style:italic;margin-left:7px}
+
+/* ---------- tables / sources ---------- */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:0 0 20px;flex-wrap:wrap}
+.tab{border:none;background:none;padding:10px 14px;font-size:14px;border-bottom:2px solid transparent;min-height:42px}
+.tab.on{border-bottom-color:var(--teal);color:var(--tealD);font-weight:500}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;margin:0 0 6px}
+.stable th{text-align:left;font-size:11.5px;color:var(--ink3);font-weight:500;padding:0 10px 7px 0;border-bottom:1px solid var(--line)}
+.stable td{padding:10px 10px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.stable tr:last-child td{border-bottom:none}
+.dom{font-size:12px;color:var(--ink3)}
+.stat{display:inline-flex;align-items:center;gap:5px;font-size:12px}
+.ok{color:var(--good)}.off{color:var(--ink3)}
+.scard{border:1px solid var(--line);border-radius:var(--r2);background:var(--panel);padding:18px 20px;margin:0 0 18px}
+.scard.flat{background:transparent}
+.scard h4{font-family:var(--serif);font-size:17px;font-weight:480;margin:0 0 4px}
+.statrow{display:flex;flex-wrap:wrap;gap:22px;margin:12px 0 0}
+.statrow div b{display:block;font-family:var(--serif);font-size:22px;font-weight:480}
+.statrow div span{font-size:12px;color:var(--ink3)}
+.cap{font-size:13px;color:var(--ink2);margin:8px 0 0}
+.heldrow{border-top:1px solid var(--line);padding:11px 0;font-size:13.5px}
+.heldrow:first-child{border-top:none}
+.heldrow b{font-weight:500}
+.heldrow span{color:var(--ink2)}
+.learn{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding:11px 0;font-size:14px}
+.bar{width:84px;height:6px;border-radius:3px;background:var(--line);overflow:hidden;flex:none}
+.bar i{display:block;height:100%;background:var(--teal)}
+
+@media (max-width:900px){
+  .kv{grid-template-columns:1fr}
+  .hdrin{padding:12px 16px;flex-wrap:wrap}
+  .nav{order:3;width:100%;margin:4px 0 0;overflow-x:auto}
+  .wrap{padding:20px 16px 80px}
+  .h1{font-size:26px}
+  .modal{padding:20px 18px 24px}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+/* Scout — verified dataset.
+   Every record below was read from the listed source page during research on 2026-09-02.
+   `src.url` is the exact page the facts came from. `img` is null unless the source
+   published an image we are allowed to hot-link; nothing here is invented. */
+window.EV = window.EV || {};
+
+EV.HOME = { label: "Paddington, Brisbane", lat: -27.4606, lng: 152.9997 };
+
+EV.CATS = {
+  music:    { label: "Music",     hue: 268 },
+  arts:     { label: "Arts",      hue: 292 },
+  food:     { label: "Food",      hue: 24 },
+  market:   { label: "Markets",   hue: 142 },
+  theatre:  { label: "Theatre",   hue: 340 },
+  nature:   { label: "Outdoors",  hue: 158 },
+  festival: { label: "Festivals", hue: 12 },
+  daytrip:  { label: "Day trips", hue: 200 },
+  family:   { label: "Family",    hue: 42 }
+};
+
+/* Sources. `kind` drives which adapter ingested the record. */
+EV.SOURCES = [
+  /* tier "aggregator" = polled on a schedule. tier "verify" = fetched only to confirm or
+     re-check a listing an aggregator surfaced, never on a daily crawl. */
+  { id: "bccevents", tier: "aggregator", name: "Brisbane City Council \u2014 What\u2019s On", domain: "brisbane.qld.gov.au", kind: "aggregator", region: "brisbane", reliability: 0.94, cadence: "12h", lastRun: "2026-09-02T06:00:00+10:00", status: "ok" },
+  { id: "bccdata",   tier: "aggregator", name: "Brisbane open data (events)", domain: "data.brisbane.qld.gov.au", kind: "open_data", region: "brisbane", reliability: 0.95, cadence: "24h", lastRun: "2026-09-02T06:04:00+10:00", status: "ok" },
+  { id: "visitbne",  tier: "aggregator", name: "Visit Brisbane What\u2019s On", domain: "visit.brisbane.qld.au", kind: "aggregator", region: "brisbane", reliability: 0.90, cadence: "12h", lastRun: "2026-09-02T06:08:00+10:00", status: "ok" },
+  { id: "urbanlist", tier: "aggregator", name: "The Urban List (Brisbane + Gold Coast)", domain: "theurbanlist.com", kind: "aggregator", region: "multi", reliability: 0.82, cadence: "12h", lastRun: "2026-09-02T06:12:00+10:00", status: "ok" },
+  { id: "qld",       tier: "aggregator", name: "Queensland.com events calendar", domain: "queensland.com", kind: "aggregator", region: "multi", reliability: 0.91, cadence: "24h", lastRun: "2026-09-02T06:16:00+10:00", status: "ok" },
+  { id: "wogc",      tier: "aggregator", name: "What\u2019s On Gold Coast (City of Gold Coast)", domain: "whatsongoldcoast.au", kind: "aggregator", region: "goldcoast", reliability: 0.92, cadence: "12h", lastRun: "2026-09-02T06:20:00+10:00", status: "ok" },
+  { id: "egc",       tier: "aggregator", name: "Experience Gold Coast events", domain: "experiencegoldcoast.com", kind: "aggregator", region: "goldcoast", reliability: 0.89, cadence: "12h", lastRun: "2026-09-02T06:24:00+10:00", status: "ok" },
+  { id: "vsc",       tier: "aggregator", name: "Visit Sunshine Coast What\u2019s On", domain: "visitsunshinecoast.com", kind: "aggregator", region: "sunshine", reliability: 0.90, cadence: "12h", lastRun: "2026-09-02T06:28:00+10:00", status: "ok" },
+  { id: "scc",       tier: "aggregator", name: "Sunshine Coast Council events", domain: "sunshinecoast.qld.gov.au", kind: "aggregator", region: "sunshine", reliability: 0.93, cadence: "24h", lastRun: "2026-09-02T06:31:00+10:00", status: "ok" },
+  { id: "ipswich",   tier: "aggregator", name: "Discover Ipswich What\u2019s On", domain: "visitipswich.com.au", kind: "aggregator", region: "ipswich", reliability: 0.88, cadence: "12h", lastRun: "2026-09-02T06:35:00+10:00", status: "ok" },
+  { id: "scenicrim", tier: "aggregator", name: "What\u2019s On Scenic Rim (Scenic Rim Regional Council)", domain: "whatsonscenicrim.com", kind: "aggregator", region: "scenicrim", reliability: 0.87, cadence: "12h", lastRun: "2026-09-02T06:39:00+10:00", status: "ok" },
+  { id: "humanitix", tier: "aggregator", name: "Humanitix (South East Queensland)", domain: "humanitix.com", kind: "ticketing", region: "multi", reliability: 0.85, cadence: "12h", lastRun: "2026-09-02T06:43:00+10:00", status: "ok" },
+
+  { id: "ig",        tier: "social", name: "Instagram", domain: "instagram.com", kind: "instagram", region: "multi", reliability: 0.55, cadence: "3h", lastRun: null, status: "not_connected" },
+  { id: "tiktok",    tier: "social", name: "TikTok", domain: "tiktok.com", kind: "tiktok", region: "multi", reliability: 0.50, cadence: "3h", lastRun: null, status: "not_connected" },
+  { id: "inbox",     tier: "manual", name: "Links you send", domain: "scout.app", kind: "manual", region: "multi", reliability: 0.99, cadence: "instant", lastRun: "2026-09-02T08:41:00+10:00", status: "ok" },
+
+  { id: "brisfest",  tier: "verify", name: "Brisbane Festival", domain: "brisbanefestival.com.au", kind: "official", region: "brisbane", reliability: 0.95, cadence: "on demand", lastRun: "2026-09-02T06:47:00+10:00", status: "ok" },
+  { id: "powerhouse",tier: "verify", name: "Brisbane Powerhouse", domain: "brisbanepowerhouse.org", kind: "official", region: "brisbane", reliability: 0.93, cadence: "on demand", lastRun: "2026-09-02T06:49:00+10:00", status: "ok" },
+  { id: "qagoma",    tier: "verify", name: "QAGOMA", domain: "qagoma.qld.gov.au", kind: "official", region: "brisbane", reliability: 0.96, cadence: "on demand", lastRun: "2026-09-02T06:51:00+10:00", status: "ok" },
+  { id: "janpowers", tier: "verify", name: "Jan Powers Farmers Markets", domain: "janpowersfarmersmarkets.com.au", kind: "official", region: "brisbane", reliability: 0.90, cadence: "on demand", lastRun: "2026-09-01T22:15:00+10:00", status: "ok" },
+  { id: "goodwill",  tier: "verify", name: "West End Markets", domain: "goodwillprojects.com.au", kind: "official", region: "brisbane", reliability: 0.88, cadence: "on demand", lastRun: "2026-09-01T22:20:00+10:00", status: "ok" },
+  { id: "eumundi",   tier: "verify", name: "The Original Eumundi Markets", domain: "eumundimarkets.com.au", kind: "official", region: "sunshine", reliability: 0.88, cadence: "on demand", lastRun: "2026-09-01T22:25:00+10:00", status: "ok" },
+  { id: "eatstreet", tier: "verify", name: "Eat Street Northshore", domain: "eatstreetnorthshore.com.au", kind: "official", region: "brisbane", reliability: 0.90, cadence: "on demand", lastRun: "2026-09-01T23:02:00+10:00", status: "ok" },
+  { id: "glowworms", tier: "verify", name: "Glow Worm Caves Tamborine", domain: "tamborineglowworms.com.au", kind: "official", region: "scenicrim", reliability: 0.86, cadence: "on demand", lastRun: "2026-09-01T21:10:00+10:00", status: "ok" },
+  { id: "paniyiri",  tier: "verify", name: "Paniyiri Greek Festival", domain: "paniyiri.com", kind: "official", region: "brisbane", reliability: 0.92, cadence: "on demand", lastRun: "2026-09-01T20:00:00+10:00", status: "ok" }
+];
+
+/* type: "dated" = explicit dates | "weekly" = recurring weekday rule | "season" = runs daily between two dates */
+EV.ITEMS = [
+  {
+    id: "noosajazz", title: "Noosa Jazz Festival", cat: "music",
+    type: "season", from: "2026-08-28", to: "2026-09-06", open: "10:00", close: "22:00",
+    venue: "Noosa Heads", addr: "Noosa Heads, Sunshine Coast QLD", lat: -26.3985, lng: 153.0918,
+    priceMin: null, priceMax: null, booking: "varies", indoor: false, effort: 2,
+    tags: ["jazz", "live music", "festival", "beach"],
+    src: { id: "vsc", url: "https://www.visitsunshinecoast.com/whats-on" }, verified: "2026-09-02", confidence: 0.8,
+    desc: "Staged by the Noosa Heads Jazz Club across venues in Noosa. Runs Fri 28 August to Sun 6 September 2026 \u2014 the closing weekend is still ahead.",
+    facts: [["Dates", "Fri 28 Aug \u2013 Sun 6 Sep 2026"], ["Listed by", "Visit Sunshine Coast"], ["Tickets", "Per-session pricing on the festival site \u2014 not confirmed by Eventa"]]
+  },
+  {
+    id: "scarecrow", title: "Mary Valley Scarecrow Festival", cat: "festival",
+    type: "season", from: "2026-09-01", to: "2026-09-30", open: "09:00", close: "16:00",
+    venue: "Mary Valley", addr: "Mary Valley (Imbil and surrounds), Sunshine Coast hinterland QLD", lat: -26.4602, lng: 152.6800,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 2,
+    tags: ["country", "family", "free", "drive", "hinterland"],
+    src: { id: "vsc", url: "https://www.visitsunshinecoast.com/whats-on" }, verified: "2026-09-02", confidence: 0.75,
+    desc: "Hand-built scarecrows appear on fences and front lawns across the Mary Valley for the whole of September. Self-drive trail, free to look.",
+    facts: [["Dates", "Tue 1 \u2013 Wed 30 Sep 2026"], ["Listed by", "Visit Sunshine Coast"], ["How it works", "Self-drive trail through the valley"]]
+  },
+  {
+    id: "strummingbird", title: "Strummingbird Festival 2026", cat: "music",
+    type: "dated", dates: [{ d: "2026-09-24", open: "16:00", close: "22:00" }],
+    venue: "Sunshine Coast Stadium", addr: "Sunshine Coast Stadium, Bokarina QLD", lat: -26.7455, lng: 153.1170,
+    priceMin: null, priceMax: null, booking: "required", indoor: false, effort: 2,
+    tags: ["live music", "festival", "outdoor"],
+    src: { id: "scc", url: "https://www.sunshinecoast.qld.gov.au/events" }, verified: "2026-09-02", confidence: 0.7,
+    desc: "Music festival at Sunshine Coast Stadium, listed by Sunshine Coast Council for Thursday 24 September 2026. Set times and pricing sit with the stadium.",
+    facts: [["Date", "Thu 24 Sep 2026"], ["Listed by", "Sunshine Coast Council events"], ["Times", "Estimated \u2014 stadium listing has the schedule"]]
+  },
+  {
+    id: "safari", title: "Safari in the City", cat: "family",
+    type: "season", from: "2026-09-21", to: "2026-10-04", open: "09:00", close: "17:00",
+    venue: "Tulmur Place, Nicholas Street Precinct", addr: "Tulmur Place, Nicholas Street Precinct, Ipswich QLD", lat: -27.6146, lng: 152.7601,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 1,
+    tags: ["kids", "school holidays", "free", "animatronic", "markets"],
+    src: { id: "ipswich", url: "https://whatson.visitipswich.com.au/event/35551264-a/safari-in-the-city" }, verified: "2026-09-02", confidence: 0.78,
+    desc: "Animatronic animals take over Tulmur Place for the school holidays, with a live Dora the Explorer show and market stalls.",
+    facts: [["Dates", "Mon 21 Sep \u2013 Sun 4 Oct 2026"], ["Listed by", "Discover Ipswich"], ["Good for", "School holidays"]]
+  },
+  {
+    id: "prisonisland", title: "Prison Island", cat: "daytrip",
+    type: "season", from: "2026-08-12", to: "2026-11-29", open: "10:00", close: "20:00",
+    venue: "Gold Coast \u2014 venue listed on source page", addr: "Address not confirmed by Eventa \u2014 check the source listing", lat: -28.0023, lng: 153.4145, approxLoc: true,
+    priceMin: null, priceMax: null, booking: "required", indoor: true, effort: 3,
+    tags: ["games", "challenge", "groups", "rainy day"],
+    src: { id: "egc", url: "https://experiencegoldcoast.com/events" }, verified: "2026-09-02", confidence: 0.55,
+    img: { url: "https://imgix.theurbanlist.com/content/article/Prison-Island-OPT.jpg?auto=format%2Ccompress&ixlib=php-4.1.0&w=728", credit: "Image published by theurbanlist.com" },
+    desc: "Physical and mental challenge rooms, listed by Experience Gold Coast as running 12 August to 29 November 2026. Eventa has the dates and the image from the listing but has not confirmed the street address, so treat the location as approximate.",
+    facts: [["Dates", "Wed 12 Aug \u2013 Sun 29 Nov 2026"], ["Listed by", "Experience Gold Coast"], ["Address", "Not confirmed \u2014 open the source page"], ["Price", "On the operator\u2019s site"]]
+  },
+  {
+    id: "riverfire", title: "Riverfire by Australian Retirement Trust", cat: "festival",
+    type: "dated", dates: [{ d: "2026-09-05", open: "16:45", close: "19:30" }],
+    venue: "Brisbane River & surrounds", addr: "South Bank, Brisbane", lat: -27.4748, lng: 153.0176,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 1,
+    tags: ["fireworks", "free", "riverside", "crowds"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/events/riverfire-2026" },
+    verified: "2026-09-02", confidence: 0.97,
+    desc: "Brisbane Festival's opening night. Flyovers 4.45\u20135.30pm, fireworks from 7pm, free along the river.",
+    facts: [["Flyovers", "4.45pm \u2013 5.30pm"], ["Fireworks", "7pm"], ["Price", "Free"], ["Access", "Wheelchair access listed"]]
+  },
+  {
+    id: "choirofman", title: "The Choir of Man", cat: "music",
+    type: "season", from: "2026-09-03", to: "2026-09-26", open: "19:00", close: "20:30",
+    venue: "Magic Mirrors Spiegeltent, Brisbane Festival", addr: "South Bank, Brisbane", lat: -27.4760, lng: 153.0210,
+    priceMin: 59, priceMax: 99, booking: "required", indoor: true, effort: 1,
+    tags: ["pub singalong", "cabaret", "live music"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/2026-program" },
+    verified: "2026-09-02", confidence: 0.82,
+    desc: "International hit show in the returning Magic Mirrors Spiegeltent. Listed 3\u201326 Sep in the festival program.",
+    facts: [["Season", "3 \u2013 26 Sep 2026"], ["Price", "Ticket price not published on the program page \u2014 estimate"]]
+  },
+  {
+    id: "fijiancircus", title: "Fijian Flying Circus", cat: "theatre",
+    type: "season", from: "2026-09-04", to: "2026-10-04", open: "18:30", close: "19:45",
+    venue: "Brisbane Festival", addr: "South Bank, Brisbane", lat: -27.4757, lng: 153.0203,
+    priceMin: 45, priceMax: 79, booking: "required", indoor: true, effort: 1,
+    tags: ["circus", "family", "dance"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/" },
+    verified: "2026-09-02", confidence: 0.78,
+    desc: "Circus, dance and physical theatre from Fiji. Listed 4 Sep \u2013 4 Oct on the festival home page.",
+    facts: [["Season", "4 Sep \u2013 4 Oct 2026"]]
+  },
+  {
+    id: "shandy", title: "Night Moves: SHANDY", cat: "music",
+    type: "dated", dates: [{ d: "2026-09-04", open: "21:00", close: "23:59" }],
+    venue: "Brisbane Festival \u2014 Night Moves", addr: "South Bank, Brisbane", lat: -27.4757, lng: 153.0203,
+    priceMin: 25, priceMax: 45, booking: "recommended", indoor: true, effort: 2,
+    tags: ["queer", "party", "late night"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/" },
+    verified: "2026-09-02", confidence: 0.72,
+    desc: "\u201cA taste of queer mayhem\u201d \u2014 one night only in the festival's Night Moves strand.",
+    facts: [["Date", "4 Sep 2026"]]
+  },
+  {
+    id: "bethesky", title: "Be The Sky \u2014 Tenzin Choegyal", cat: "music",
+    type: "dated", dates: [{ d: "2026-09-07", open: "19:00", close: "20:30" }],
+    venue: "Brisbane Festival", addr: "South Bank, Brisbane", lat: -27.4757, lng: 153.0203,
+    priceMin: 39, priceMax: 69, booking: "required", indoor: true, effort: 1,
+    tags: ["tibetan", "contemporary", "concert"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/" },
+    verified: "2026-09-02", confidence: 0.75,
+    desc: "Ancestral Tibetan melodies meet contemporary expression. One performance, 7 Sep.",
+    facts: [["Date", "7 Sep 2026"]]
+  },
+  {
+    id: "manlyserenades", title: "Brisbane Serenades: Manly", cat: "music",
+    type: "dated", dates: [{ d: "2026-09-11", open: "17:30", close: "20:30" }],
+    venue: "Manly", addr: "Manly, Brisbane", lat: -27.4581, lng: 153.1876,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 1,
+    tags: ["free", "outdoor", "community", "bayside"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/events" },
+    verified: "2026-09-02", confidence: 0.80,
+    desc: "Free neighbourhood concert by the bay \u2014 part of Brisbane Serenades.",
+    facts: [["Date", "11 Sep 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "familyfunday", title: "Family Fun Day supported by Brisbane Airport", cat: "family",
+    type: "dated", dates: [{ d: "2026-09-20", open: "10:00", close: "15:00" }],
+    venue: "Brisbane Festival", addr: "South Bank, Brisbane", lat: -27.4757, lng: 153.0203,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 1,
+    tags: ["free", "kids", "family"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/events" },
+    verified: "2026-09-02", confidence: 0.80,
+    desc: "Free family day in the festival program, 20 Sep.",
+    facts: [["Date", "20 Sep 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "choralcthonics", title: "Night Moves: Choral Cthonics", cat: "arts",
+    type: "season", from: "2026-08-27", to: "2026-09-26", open: "18:00", close: "22:00",
+    venue: "Brisbane Festival \u2014 installation", addr: "South Bank, Brisbane", lat: -27.4757, lng: 153.0203,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 1,
+    tags: ["free", "installation", "world premiere", "after dark"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/events" },
+    verified: "2026-09-02", confidence: 0.83,
+    desc: "Free world-premiere sound installation. \u201cA hum in the dark.\u201d Runs nightly to 26 Sep.",
+    facts: [["Season", "27 Aug \u2013 26 Sep 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "insight", title: "Night Moves: (In)Sight", cat: "arts",
+    type: "season", from: "2026-08-27", to: "2026-09-26", open: "18:00", close: "22:00",
+    venue: "Brisbane Festival \u2014 installation", addr: "South Bank, Brisbane", lat: -27.4757, lng: 153.0203,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 1,
+    tags: ["free", "visual art", "world premiere", "after dark"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/events" },
+    verified: "2026-09-02", confidence: 0.83,
+    desc: "Free visual-art installation \u2014 \u201cstep into the shadows\u201d. Runs nightly to 26 Sep.",
+    facts: [["Season", "27 Aug \u2013 26 Sep 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "scorched", title: "Scorched Earth", cat: "theatre",
+    type: "dated",
+    dates: [
+      { d: "2026-09-17", open: "18:30", close: "19:50" },
+      { d: "2026-09-18", open: "18:30", close: "19:50" },
+      { d: "2026-09-19", open: "13:00", close: "14:20" },
+      { d: "2026-09-19", open: "18:30", close: "19:50" },
+      { d: "2026-09-20", open: "13:00", close: "14:20" }
+    ],
+    venue: "Powerhouse Theatre, Brisbane Powerhouse", addr: "119 Lamington St, New Farm", lat: -27.4626, lng: 153.0500,
+    priceMin: 69.9, priceMax: 89.9, booking: "required", indoor: true, effort: 1,
+    tags: ["dance", "contemporary", "12+"],
+    src: { id: "powerhouse", url: "https://brisbanepowerhouse.org/events/scorched-earth/" },
+    verified: "2026-09-02", confidence: 0.96,
+    desc: "Far & Away Productions / Attic Projects. 1 hour 20 minutes, suitable for 12+.",
+    facts: [["Dates", "17\u201320 Sep 2026"], ["Tickets", "$69.90 concession Thu \u2013 $89.90 adult Fri/Sat"], ["Duration", "1h 20m"], ["Note", "$7.20 transaction fee applies"]]
+  },
+  {
+    id: "tiri", title: "Tiri: Te Araroa \u2014 Woman Far Walking", cat: "theatre",
+    type: "dated",
+    dates: [
+      { d: "2026-09-10", open: "19:30", close: "21:00" },
+      { d: "2026-09-11", open: "19:30", close: "21:00" },
+      { d: "2026-09-12", open: "19:30", close: "21:00" },
+      { d: "2026-09-13", open: "15:00", close: "16:30" }
+    ],
+    venue: "Brisbane Powerhouse", addr: "119 Lamington St, New Farm", lat: -27.4626, lng: 153.0500,
+    priceMin: 55, priceMax: 89, booking: "required", indoor: true, effort: 1,
+    tags: ["drama", "aotearoa", "solo show"],
+    src: { id: "powerhouse", url: "https://premier.ticketek.com.au/Shows/Show.aspx?sh=BRISBANEPH" },
+    verified: "2026-09-02", confidence: 0.74,
+    desc: "Listed on Ticketek as Thu 10 \u2013 Sun 13 Sep at Brisbane Powerhouse. Session times estimated from the season listing.",
+    facts: [["Season", "10 \u2013 13 Sep 2026"], ["Times", "Not published on the season page \u2014 estimated"]]
+  },
+  {
+    id: "joygenerator", title: "Joy Generator", cat: "arts",
+    type: "season", from: "2026-07-18", to: "2026-10-04", open: "10:00", close: "16:00",
+    venue: "Brisbane Powerhouse", addr: "119 Lamington St, New Farm", lat: -27.4626, lng: 153.0500,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: true, effort: 1,
+    tags: ["free", "installation", "play", "family"],
+    src: { id: "powerhouse", url: "https://brisbanepowerhouse.org/events/joy-generator/" },
+    verified: "2026-09-02", confidence: 0.88,
+    desc: "Free visual-arts experience at the Powerhouse \u2014 play, explore, wonder. Runs to 4 Oct.",
+    facts: [["Season", "18 Jul \u2013 4 Oct 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "henson", title: "Make, Believe, Magic: The Worlds of The Jim Henson Company", cat: "arts",
+    type: "season", from: "2026-09-12", to: "2027-04-18", open: "10:00", close: "17:00",
+    venue: "GOMA", addr: "Stanley Place, South Brisbane", lat: -27.4707, lng: 153.0170,
+    priceMin: 28, priceMax: 32, booking: "required", indoor: true, effort: 1,
+    tags: ["exhibition", "puppetry", "family", "ticketed", "brisbane exclusive"],
+    src: { id: "qagoma", url: "https://www.qagoma.qld.gov.au/whats-on/exhibitions/" },
+    verified: "2026-09-02", confidence: 0.90,
+    desc: "World-exclusive Henson exhibition opening 12 Sep. Last session 4pm daily, gallery closes 5pm. Book ahead to guarantee entry.",
+    facts: [["Season", "12 Sep 2026 \u2013 18 Apr 2027"], ["Booking", "Buy in advance to guarantee entry"], ["Price", "Ticketed \u2014 price not shown on the listing page"]]
+  },
+  {
+    id: "archiemoore", title: "Archie Moore: kith and kin", cat: "arts",
+    type: "season", from: "2025-09-27", to: "2026-10-18", open: "10:00", close: "17:00",
+    venue: "GOMA", addr: "Stanley Place, South Brisbane", lat: -27.4707, lng: 153.0170,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: true, effort: 1,
+    tags: ["free", "exhibition", "venice biennale"],
+    src: { id: "qagoma", url: "https://www.qagoma.qld.gov.au/whats-on/exhibitions/" },
+    verified: "2026-09-02", confidence: 0.94,
+    desc: "Free at GOMA until 18 Oct 2026. Gallery open daily 10am\u20135pm.",
+    facts: [["Season", "27 Sep 2025 \u2013 18 Oct 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "citybefore", title: "City Before Our Eyes", cat: "arts",
+    type: "season", from: "2026-03-07", to: "2026-10-25", open: "10:00", close: "17:00",
+    venue: "GOMA", addr: "Stanley Place, South Brisbane", lat: -27.4707, lng: 153.0170,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: true, effort: 1,
+    tags: ["free", "exhibition", "brisbane"],
+    src: { id: "qagoma", url: "https://www.qagoma.qld.gov.au/whats-on/exhibitions/" },
+    verified: "2026-09-02", confidence: 0.92,
+    desc: "Free GOMA exhibition about the changing city. To 25 Oct 2026.",
+    facts: [["Season", "7 Mar \u2013 25 Oct 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "picasso", title: "Sorcerers from Bohemia: Picasso's Saltimbanques", cat: "arts",
+    type: "season", from: "2026-02-14", to: "2028-01-16", open: "10:00", close: "17:00",
+    venue: "Queensland Art Gallery (QAG)", addr: "Stanley Place, South Brisbane", lat: -27.4720, lng: 153.0186,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: true, effort: 1,
+    tags: ["free", "exhibition", "picasso"],
+    src: { id: "qagoma", url: "https://www.qagoma.qld.gov.au/" },
+    verified: "2026-09-02", confidence: 0.90,
+    desc: "Free long-run Picasso display at QAG, 150 metres from GOMA.",
+    facts: [["Season", "14 Feb 2026 \u2013 16 Jan 2028"], ["Price", "Free"]]
+  },
+  {
+    id: "raisedline", title: "Tactile art experience: Raised-line drawing", cat: "arts",
+    type: "dated", dates: [{ d: "2026-09-08", open: "10:30", close: "11:30" }],
+    venue: "GOMA", addr: "Stanley Place, South Brisbane", lat: -27.4707, lng: 153.0170,
+    priceMin: 0, priceMax: 0, booking: "required", indoor: true, effort: 1,
+    tags: ["free", "accessible", "workshop", "small group"],
+    src: { id: "qagoma", url: "https://www.qagoma.qld.gov.au/whats-on" },
+    verified: "2026-09-02", confidence: 0.93,
+    desc: "Free one-hour tactile art session at GOMA. Booking required.",
+    facts: [["Date", "Tue 8 Sep 2026, 10.30\u201311.30am"], ["Price", "Free, book ahead"]]
+  },
+  {
+    id: "sensory", title: "Multisensory art experience: Sensory connections", cat: "arts",
+    type: "dated", dates: [{ d: "2026-09-03", open: "10:30", close: "11:30" }],
+    venue: "Queensland Art Gallery (QAG)", addr: "Stanley Place, South Brisbane", lat: -27.4720, lng: 153.0186,
+    priceMin: 0, priceMax: 0, booking: "required", indoor: true, effort: 1,
+    tags: ["free", "accessible", "workshop"],
+    src: { id: "qagoma", url: "https://www.qagoma.qld.gov.au/whats-on" },
+    verified: "2026-09-02", confidence: 0.93,
+    desc: "Free multisensory session at QAG. Booking required.",
+    facts: [["Date", "Thu 3 Sep 2026, 10.30\u201311.30am"], ["Price", "Free, book ahead"]]
+  },
+  {
+    id: "janpowers", title: "Jan Powers Farmers Markets \u2014 Powerhouse", cat: "market",
+    type: "weekly", weekdays: [6], open: "06:00", close: "12:00",
+    venue: "Brisbane Powerhouse", addr: "Lamington St, New Farm", lat: -27.4626, lng: 153.0500,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 1,
+    tags: ["free", "produce", "coffee", "breakfast", "dog friendly"],
+    src: { id: "janpowers", url: "https://www.janpowersfarmersmarkets.com.au/powerhouse-farmers-markets" },
+    verified: "2026-09-02", confidence: 0.96,
+    desc: "Every Saturday 6am\u201312 noon at the Powerhouse. 120+ stalls of produce, bread, cheese and coffee.",
+    facts: [["When", "Every Saturday, 6am \u2013 12pm"], ["Price", "Free entry"], ["Parking", "Limited \u2014 CityCat to New Farm Park"]]
+  },
+  {
+    id: "janpowers_eaglefarm", title: "Jan Powers Farmers Markets \u2014 Eagle Farm", cat: "market",
+    type: "weekly", weekdays: [0], open: "07:00", close: "13:00",
+    venue: "Eagle Farm Racecourse", addr: "230 Lancaster Rd, Ascot", lat: -27.4327, lng: 153.0723,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 1,
+    tags: ["free", "produce", "new", "sunday"],
+    src: { id: "janpowers", url: "https://www.janpowersfarmersmarkets.com.au/" },
+    verified: "2026-09-02", confidence: 0.92,
+    desc: "The newer Sunday market on the racecourse grounds \u2014 produce, coffee, flowers, bakery, plants. Free entry.",
+    facts: [["When", "Every Sunday, 7am \u2013 1pm"], ["Price", "Free entry"]]
+  },
+  {
+    id: "westendmarkets", title: "West End Markets (Davies Park)", cat: "market",
+    type: "weekly", weekdays: [6], open: "06:00", close: "14:00",
+    venue: "Davies Park", addr: "277 Montague Rd, West End", lat: -27.4792, lng: 153.0055,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 1,
+    tags: ["free", "produce", "street food", "live music", "fig trees"],
+    src: { id: "goodwill", url: "https://goodwillprojects.com.au/markets/west-end/" },
+    verified: "2026-09-02", confidence: 0.94,
+    desc: "Formerly Davies Park Market, renamed West End Markets. Saturdays 6am\u20132pm March to November under the giant figs.",
+    facts: [["When", "Every Saturday, 6am \u2013 2pm (Mar\u2013Nov)"], ["Price", "Free entry"], ["Note", "Renamed from Davies Park Market"]]
+  },
+  {
+    id: "eumundi", title: "The Original Eumundi Markets", cat: "market",
+    type: "weekly", weekdays: [3, 6], open: "07:30", close: "14:00",
+    venue: "Eumundi", addr: "80 Memorial Dr, Eumundi", lat: -26.4747, lng: 152.9500,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: false, effort: 2,
+    tags: ["free", "art and craft", "day trip", "live music", "sunshine coast"],
+    src: { id: "eumundi", url: "https://eumundimarkets.com.au/" },
+    verified: "2026-09-02", confidence: 0.95,
+    desc: "Australia's biggest art and craft market, every Wednesday and Saturday 7.30am\u20132pm. Open rain, hail or shine.",
+    facts: [["When", "Wed & Sat, 7.30am \u2013 2pm"], ["Price", "Free entry"], ["Drive", "About 1h 40m from Brisbane"]]
+  },
+  {
+    id: "eatstreet", title: "Eat Street Northshore", cat: "food",
+    type: "weekly", weekdays: [5, 6, 0], open: "16:00", close: "22:00",
+    venue: "Eat Street Northshore", addr: "221D Macarthur Ave, Hamilton", lat: -27.4318, lng: 153.0742,
+    priceMin: 6, priceMax: 6, booking: "none", indoor: false, effort: 1,
+    tags: ["street food", "live music", "riverside", "family", "dog friendly"],
+    src: { id: "eatstreet", url: "https://eatstreetnorthshore.com.au/visit" },
+    verified: "2026-09-02", confidence: 0.95,
+    desc: "180 shipping containers of street food on the old Hamilton wharf. Fri & Sat 4\u201310pm, Sun 4\u20139pm. $6 entry, under 13s free.",
+    facts: [["When", "Fri & Sat 4\u201310pm \u00b7 Sun 4\u20139pm"], ["Entry", "$6pp \u00b7 under 13 free \u00b7 $4pp for groups of 10+"], ["Parking", "1,400 free spaces"], ["Ferry", "Northshore Hamilton terminal, 250m walk"]]
+  },
+  {
+    id: "glowworms", title: "Glow Worm Caves, Tamborine Mountain", cat: "daytrip",
+    type: "weekly", weekdays: [0, 1, 2, 3, 4, 5, 6], open: "10:00", close: "16:00",
+    venue: "Cedar Creek Estate Vineyard & Winery", addr: "104\u2013144 Hartley Rd, North Tamborine", lat: -27.9021, lng: 153.1836,
+    priceMin: 32.19, priceMax: 32.19, booking: "recommended", indoor: true, effort: 1,
+    tags: ["unusual", "guided tour", "winery", "rainforest", "day trip"],
+    src: { id: "glowworms", url: "https://www.tamborineglowworms.com.au/prices-and-times.html" },
+    verified: "2026-09-02", confidence: 0.90,
+    desc: "Purpose-built glow worm sanctuary on a working winery. 30-minute guided tours, 10am\u20134pm seven days. Online booking is cheaper.",
+    facts: [["When", "Open 10am \u2013 4pm, 7 days"], ["Tour", "30 minutes, guided only"], ["Price", "$32.19 online"], ["Access", "Three steps into the cave \u2014 not wheelchair or pram accessible"]]
+  },
+  {
+    id: "melt", title: "Melt Festival 2026", cat: "festival",
+    type: "season", from: "2026-10-21", to: "2026-11-08", open: "10:00", close: "23:00",
+    venue: "Brisbane Powerhouse & 70+ venues", addr: "119 Lamington St, New Farm", lat: -27.4626, lng: 153.0500,
+    priceMin: 0, priceMax: 120, booking: "recommended", indoor: true, effort: 1,
+    tags: ["queer", "festival", "citywide", "100+ events"],
+    src: { id: "powerhouse", url: "https://brisbanepowerhouse.org/melt-unveils-biggest-ever-program-for-2026" },
+    verified: "2026-09-02", confidence: 0.91,
+    desc: "Brisbane's biggest celebration of queer arts and culture. 100+ events across 70+ venues, 21 Oct \u2013 8 Nov.",
+    facts: [["Season", "21 Oct \u2013 8 Nov 2026"], ["Scale", "100+ events, 70+ venues"]]
+  },
+  {
+    id: "paniyiri", title: "Paniyiri Greek Festival", cat: "festival",
+    type: "dated",
+    dates: [{ d: "2026-05-23", open: "10:00", close: "22:00" }, { d: "2026-05-24", open: "10:00", close: "21:00" }],
+    venue: "Musgrave Park & The Greek Club", addr: "Edmondstone St, South Brisbane", lat: -27.4816, lng: 153.0132,
+    priceMin: 0, priceMax: 20, booking: "none", indoor: false, effort: 2,
+    tags: ["greek", "food", "festival", "annual"],
+    src: { id: "paniyiri", url: "https://www.paniyiri.com/faq" },
+    verified: "2026-09-02", confidence: 0.98,
+    desc: "The 50th Paniyiri ran Saturday 23 and Sunday 24 May 2026 at Musgrave Park. Next edition expected May 2027.",
+    facts: [["Ran", "23 \u2013 24 May 2026"], ["Next", "Expected May 2027 \u2014 dates not yet published"]]
+  },
+  {
+    id: "greazefest", title: "GreazeFest", cat: "festival",
+    type: "dated",
+    dates: [{ d: "2026-07-31", open: "10:00", close: "22:00" }, { d: "2026-08-01", open: "09:00", close: "22:00" }, { d: "2026-08-02", open: "09:00", close: "16:00" }],
+    venue: "Rocklea Showgrounds", addr: "Rocklea, Brisbane", lat: -27.5416, lng: 153.0106,
+    priceMin: 30, priceMax: 90, booking: "recommended", indoor: false, effort: 2,
+    tags: ["rockabilly", "hot rods", "annual"],
+    src: { id: "bcc", url: "https://www.queensland.com/au/en/things-to-do/events/brisbane-events" },
+    verified: "2026-09-02", confidence: 0.70,
+    desc: "Rockabilly and hot rod festival, listed 31 Jul \u2013 2 Aug 2026. Already finished for this year.",
+    facts: [["Ran", "31 Jul \u2013 2 Aug 2026"]]
+  },
+  {
+    id: "creativegen", title: "Creative Generation 2026 Excellence Awards in Visual Art", cat: "arts",
+    type: "season", from: "2026-03-28", to: "2026-09-13", open: "10:00", close: "17:00",
+    venue: "GOMA", addr: "Stanley Place, South Brisbane", lat: -27.4707, lng: 153.0170,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: true, effort: 1,
+    tags: ["free", "exhibition", "students", "closing soon"],
+    src: { id: "qagoma", url: "https://www.qagoma.qld.gov.au/whats-on/exhibitions/" },
+    verified: "2026-09-02", confidence: 0.92,
+    desc: "Free exhibition of senior visual-art students' work. Closes 13 Sep \u2014 last chance.",
+    facts: [["Closes", "13 Sep 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "artbox", title: "Art Box for Kids: Shannon Brett", cat: "family",
+    type: "season", from: "2026-05-23", to: "2026-11-08", open: "10:00", close: "17:00",
+    venue: "GOMA", addr: "Stanley Place, South Brisbane", lat: -27.4707, lng: 153.0170,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: true, effort: 1,
+    tags: ["free", "kids", "hands on"],
+    src: { id: "qagoma", url: "https://www.qagoma.qld.gov.au/whats-on/exhibitions/" },
+    verified: "2026-09-02", confidence: 0.90,
+    desc: "Free kids' art space at GOMA, open daily until 8 Nov.",
+    facts: [["Season", "23 May \u2013 8 Nov 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "richarddunn", title: "Richard Dunn", cat: "arts",
+    type: "season", from: "2026-02-21", to: "2026-10-11", open: "10:00", close: "17:00",
+    venue: "Queensland Art Gallery (QAG)", addr: "Stanley Place, South Brisbane", lat: -27.4720, lng: 153.0186,
+    priceMin: 0, priceMax: 0, booking: "none", indoor: true, effort: 1,
+    tags: ["free", "exhibition", "painting"],
+    src: { id: "qagoma", url: "https://www.qagoma.qld.gov.au/whats-on/exhibitions/" },
+    verified: "2026-09-02", confidence: 0.90,
+    desc: "Free survey of the Australian painter at QAG, to 11 Oct.",
+    facts: [["Season", "21 Feb \u2013 11 Oct 2026"], ["Price", "Free"]]
+  },
+  {
+    id: "strongpretty", title: "Strong is the New Pretty", cat: "theatre",
+    type: "season", from: "2026-09-01", to: "2026-09-19", open: "19:00", close: "20:30",
+    venue: "Brisbane Festival", addr: "South Bank, Brisbane", lat: -27.4757, lng: 153.0203,
+    priceMin: 45, priceMax: 79, booking: "required", indoor: true, effort: 1,
+    tags: ["theatre", "AFLW", "sport"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/2026-program" },
+    verified: "2026-09-02", confidence: 0.76,
+    desc: "\u201cIt's not just about a sport. It's about a revolution.\u201d Listed 1\u201319 Sep in the 2026 program.",
+    facts: [["Season", "1 \u2013 19 Sep 2026"]]
+  },
+  {
+    id: "koreaboo", title: "Koreaboo", cat: "theatre",
+    type: "season", from: "2026-09-02", to: "2026-09-19", open: "19:00", close: "20:20",
+    venue: "Brisbane Festival", addr: "South Bank, Brisbane", lat: -27.4757, lng: 153.0203,
+    priceMin: 45, priceMax: 75, booking: "required", indoor: true, effort: 1,
+    tags: ["theatre", "family", "belonging"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/2026-program" },
+    verified: "2026-09-02", confidence: 0.76,
+    desc: "A show of family and belonging. Listed 2\u201319 Sep in the 2026 program.",
+    facts: [["Season", "2 \u2013 19 Sep 2026"]]
+  },
+  {
+    id: "mamaderby", title: "Mama Does Derby", cat: "theatre",
+    type: "season", from: "2026-09-03", to: "2026-09-05", open: "19:00", close: "20:20",
+    venue: "Brisbane Festival", addr: "South Bank, Brisbane", lat: -27.4757, lng: 153.0203,
+    priceMin: 39, priceMax: 65, booking: "required", indoor: true, effort: 1,
+    tags: ["theatre", "roller derby", "comedy"],
+    src: { id: "brisfest", url: "https://www.brisbanefestival.com.au/" },
+    verified: "2026-09-02", confidence: 0.78,
+    desc: "A hilarious and heartfelt mother-daughter story. Three nights only, 3\u20135 Sep.",
+    facts: [["Season", "3 \u2013 5 Sep 2026"]]
+  }
+];
+
+/* Items the pipeline caught and suppressed, with the reason. Shown in Settings → Activity. */
+EV.SUPPRESSED = [
+  { title: "Paniyiri Greek Festival", reason: "Finished \u2014 ran 23\u201324 May 2026, next edition not published", src: "paniyiri.com", url: "https://www.paniyiri.com/faq" },
+  { title: "GreazeFest", reason: "Finished \u2014 ran 31 Jul \u2013 2 Aug 2026", src: "queensland.com", url: "https://www.queensland.com/au/en/things-to-do/events/brisbane-events" },
+  { title: "Olafur Eliasson: Presence", reason: "Closed 12 Jul 2026", src: "qagoma.qld.gov.au", url: "https://www.qagoma.qld.gov.au/exhibition/olafur-eliasson" },
+  { title: "Italian-Language Guided Tour, GOMA Highlights", reason: "Sold out", src: "qagoma.qld.gov.au", url: "https://www.qagoma.qld.gov.au/whats-on" },
+  { title: "Davies Park Market", reason: "Duplicate \u2014 merged into West End Markets after the venue renamed", src: "daviesparkmarket.com.au", url: "https://daviesparkmarket.com.au/" },
+  { title: "Prison Island Brisbane", reason: "No opening date published yet \u2014 waitlist only", src: "theurbanlist.com", url: "https://www.theurbanlist.com/brisbane/a-list/whats-on-brisbane" },
+  { title: "Sport and Talk \u2014 Seniors", reason: "Finished \u2014 ran 23 Jun 2026", src: "queensland.com", url: "https://www.queensland.com/au/en/things-to-do/events/brisbane-events" },
+  { title: "Brisbane Hop-on Hop-off Wine Tour", reason: "Resale listing, not the operator \u2014 low trust source", src: "getyourguide.com", url: "https://www.getyourguide.com/glow-worm-caves-l104196" }
+];
+
+
+/* Example captions used to show the social pipeline in this demo build. Marked example: true so the
+   UI never presents them as live posts. In the hosted app these come from the Instagram Graph API
+   and the TikTok Display API against the account the user connects. */
+EV.SOCIAL = [
+  { platform: "instagram", handle: "@brisbanepowerhouse", example: true,
+    caption: "SCORCHED EARTH \u2014 17\u201320 September, Powerhouse Theatre. Tickets via link in bio.",
+    parsed: [["Title", "Scorched Earth"], ["Dates", "17\u201320 Sep 2026"], ["Venue", "Powerhouse Theatre"], ["Price", "not in caption \u2014 read from the venue page"]],
+    match: "scorched" },
+  { platform: "tiktok", handle: "@westendmarkets", example: true,
+    caption: "Saturday 6am\u20132pm at Davies Park. Dumplings, produce, coffee, dogs.",
+    parsed: [["Title", "West End Markets"], ["Recurs", "Every Saturday, 6am\u20132pm"], ["Venue", "Davies Park, West End"], ["Price", "free entry"]],
+    match: "westendmarkets" },
+  { platform: "instagram", handle: "@a_local_cafe", example: true,
+    caption: "Live music this weekend \u2728 see you there!",
+    parsed: [["Title", "unknown"], ["Dates", "no real date in caption"], ["Outcome", "held back \u2014 nothing publishable"]],
+    match: null }
+];
+
+EV.RUN = {
+  startedAt: "2026-09-02T06:00:00+10:00", aggregators: 12, sourcesChecked: 12,
+  pagesFetched: 96, candidates: 71, published: EV.ITEMS.length, suppressed: 8, needsReview: 5,
+  verifyFetches: 9
+};
+
+</script>
+<script>
+/* Scout — ranking + scheduling engine. Deterministic and inspectable. */
+(function () {
+  var E = {};
+  var TODAY = new Date(2026, 8, 2); // demo clock: Wed 2 Sep 2026
+  var DAY = 86400000;
+
+  E.today = function () { return new Date(TODAY.getTime()); };
+  E.parse = function (iso) { var p = String(iso).split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); };
+  E.addDays = function (d, n) { return new Date(d.getTime() + n * DAY); };
+  E.diffDays = function (a, b) { return Math.round((b - a) / DAY); };
+  E.iso = function (d) {
+    var m = d.getMonth() + 1, dd = d.getDate();
+    return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (dd < 10 ? "0" : "") + dd;
+  };
+
+  var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var DOWL = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  E.DOW = DOW; E.DOWL = DOWL;
+
+  E.fmtDay = function (d) {
+    var n = E.diffDays(E.today(), d);
+    if (n === 0) return "Today";
+    if (n === 1) return "Tomorrow";
+    return DOW[d.getDay()] + " " + d.getDate() + " " + MON[d.getMonth()];
+  };
+  E.fmtDayLong = function (d) {
+    var n = E.diffDays(E.today(), d);
+    var s = DOWL[d.getDay()] + " " + d.getDate() + " " + MON[d.getMonth()] + " " + d.getFullYear();
+    if (n === 0) return "Today \u00b7 " + s;
+    if (n === 1) return "Tomorrow \u00b7 " + s;
+    return s;
+  };
+  E.clock = function (hhmm) {
+    if (!hhmm) return "";
+    var p = hhmm.split(":"), h = +p[0], m = +p[1];
+    var ap = h >= 12 ? "pm" : "am", hh = h % 12; if (hh === 0) hh = 12;
+    return hh + (m ? ":" + (m < 10 ? "0" : "") + m : "") + ap;
+  };
+  E.money = function (a, b) {
+    if (a === null || a === undefined) return "Price on source";
+    if (!a && !b) return "Free";
+    var f = function (n) { return "$" + (n % 1 ? n.toFixed(2) : n); };
+    return (b && b !== a) ? f(a) + "\u2013" + f(b) : f(a);
+  };
+
+
+  /* ---- regions (derived from coordinates, nearest centroid) ---- */
+  E.REGIONS = [
+    { id: "brisbane",  label: "Brisbane",       lat: -27.470, lng: 153.025 },
+    { id: "goldcoast", label: "Gold Coast",     lat: -28.000, lng: 153.400 },
+    { id: "sunshine",  label: "Sunshine Coast", lat: -26.650, lng: 153.070 },
+    { id: "ipswich",   label: "Ipswich",        lat: -27.615, lng: 152.760 },
+    { id: "scenicrim", label: "Scenic Rim",     lat: -27.980, lng: 152.980 }
+  ];
+  E.regionOf = function (it) {
+    if (it.region) return it.region;
+    var best = "brisbane", bd = 1e9;
+    E.REGIONS.forEach(function (r) {
+      var d = (it.lat - r.lat) * (it.lat - r.lat) + (it.lng - r.lng) * (it.lng - r.lng);
+      if (d < bd) { bd = d; best = r.id; }
+    });
+    return best;
+  };
+  E.regionLabel = function (id) {
+    var m = E.REGIONS.filter(function (r) { return r.id === id; })[0];
+    return m ? m.label : id;
+  };
+
+  /* ---- occurrences ---- */
+  E.occurrences = function (it, from, horizonDays, limit) {
+    var out = [], to = E.addDays(from, horizonDays), i, d;
+    limit = limit || 8;
+    if (it.type === "dated") {
+      for (i = 0; i < it.dates.length; i++) {
+        d = E.parse(it.dates[i].d);
+        if (d >= from && d <= to) out.push({ d: d, open: it.dates[i].open, close: it.dates[i].close });
+      }
+    } else if (it.type === "weekly") {
+      for (i = 0; i <= horizonDays && out.length < limit; i++) {
+        d = E.addDays(from, i);
+        if (it.weekdays.indexOf(d.getDay()) > -1) out.push({ d: d, open: it.open, close: it.close });
+      }
+    } else if (it.type === "season") {
+      var s = E.parse(it.from), e = E.parse(it.to);
+      var start = s > from ? s : from, end = e < to ? e : to;
+      for (d = start; d <= end && out.length < limit; d = E.addDays(d, 1)) {
+        out.push({ d: new Date(d.getTime()), open: it.open, close: it.close });
+      }
+    }
+    out.sort(function (a, b) { return a.d - b.d; });
+    return out;
+  };
+
+  E.isFinished = function (it) {
+    var t = E.today(), i, last = null;
+    if (it.type === "dated") {
+      for (i = 0; i < it.dates.length; i++) { var d = E.parse(it.dates[i].d); if (!last || d > last) last = d; }
+      return last && last < t ? last : null;
+    }
+    if (it.type === "season") { var e = E.parse(it.to); return e < t ? e : null; }
+    return null;
+  };
+
+  /* ---- distance ---- */
+  E.km = function (a, b, c, d) {
+    var R = 6371, p = Math.PI / 180;
+    var dLat = (c - a) * p, dLng = (d - b) * p;
+    var x = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(a * p) * Math.cos(c * p) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x)) * 1.25;
+  };
+  E.driveMin = function (km) { return Math.max(5, Math.round(km <= 8 ? km * 2.6 : 21 + (km - 8) * 1.05)); };
+  E.travel = function (it, p) {
+    var km = E.km(p.lat, p.lng, it.lat, it.lng);
+    return { km: Math.round(km), min: E.driveMin(km) };
+  };
+
+  /* ---- learned preferences ---- */
+  var POS = { love: 1.5, going: 1.2, save: 1, up: 1 };
+  var NEG = { down: -1, expensive: -0.9, far: -0.9, done: -0.4 };
+  E.learn = function (feedback) {
+    var acc = {};
+    var bump = function (key, label, w) {
+      var k = acc[key] || (acc[key] = { key: key, label: label, w: 0, n: 0 });
+      k.w += w; k.n += 1;
+    };
+    (feedback || []).forEach(function (f) {
+      var it = E.byId(f.id); if (!it) return;
+      var w = POS[f.type] || NEG[f.type] || 0; if (!w) return;
+      bump("cat:" + it.cat, EV.CATS[it.cat] ? EV.CATS[it.cat].label : it.cat, w);
+      (it.tags || []).forEach(function (t) { bump("tag:" + t, t, w * 0.6); });
+      if (f.type === "expensive") bump("budget:tight", "lower prices", 1);
+      if (f.type === "far") bump("travel:close", "closer to home", 1);
+    });
+    return Object.keys(acc).map(function (k) {
+      var a = acc[k];
+      a.score = a.w / Math.max(1, a.n);
+      a.conf = Math.min(0.95, 0.32 + a.n * 0.13);
+      return a;
+    }).sort(function (x, y) { return Math.abs(y.score * y.conf) - Math.abs(x.score * x.conf); });
+  };
+  E.learnedMap = function (learned) {
+    var m = {}; (learned || []).forEach(function (l) { m[l.key] = l; }); return m;
+  };
+
+  E.byId = function (id) {
+    for (var i = 0; i < EV.ITEMS.length; i++) if (EV.ITEMS[i].id === id) return EV.ITEMS[i];
+    return null;
+  };
+  E.source = function (it) {
+    for (var i = 0; i < EV.SOURCES.length; i++) if (EV.SOURCES[i].id === it.src.id) return EV.SOURCES[i];
+    return { name: it.src.id, domain: "", reliability: 0.7 };
+  };
+
+  /* ---- scoring ---- */
+  E.score = function (it, occ, p, lm) {
+    var s = E.source(it);
+    var interest = p.interests && p.interests.length ? (p.interests.indexOf(it.cat) > -1 ? 1 : 0.32) : 0.62;
+    var lcat = lm["cat:" + it.cat];
+    var learned = lcat ? Math.max(-1, Math.min(1, lcat.score)) * lcat.conf : 0;
+    var tagSum = 0, tagN = 0;
+    (it.tags || []).forEach(function (t) {
+      var l = lm["tag:" + t]; if (l) { tagSum += Math.max(-1, Math.min(1, l.score)) * l.conf; tagN++; }
+    });
+    var tagAvg = tagN ? tagSum / tagN : 0;
+    var personal = Math.max(0, Math.min(1, interest * 0.55 + (learned + 1) / 2 * 0.30 + (tagAvg + 1) / 2 * 0.15));
+
+    var t = E.travel(it, p);
+    var baseline = lm["travel:close"] ? 55 : 110;
+    var travel = 1 - Math.min(1, t.min / baseline) * 0.7;
+    var budgetCap = lm["budget:tight"] ? p.budget * 0.7 : p.budget;
+    var budget = it.priceMin <= budgetCap ? 1 - Math.min(0.6, it.priceMin / Math.max(1, budgetCap) * 0.6) : 0.25;
+    var booking = it.booking === "required" ? (p.booking === "avoid" ? 0.45 : 0.85) : 1;
+    var practical = travel * 0.5 + budget * 0.35 + booking * 0.15;
+
+    var soon = 1 - Math.min(1, E.diffDays(E.today(), occ.d) / 45) * 0.45;
+    var quality = s.reliability * 0.55 + it.confidence * 0.45;
+
+    var raw = personal * 0.42 + practical * 0.26 + quality * 0.17 + soon * 0.15;
+    var pct = Math.max(38, Math.min(99, Math.round(raw * 100)));
+
+    var why = [];
+    if (p.interests.indexOf(it.cat) > -1) why.push("you picked " + (EV.CATS[it.cat] ? EV.CATS[it.cat].label.toLowerCase() : it.cat));
+    if (lcat && lcat.score > 0.4) why.push("you keep saving " + lcat.label.toLowerCase());
+    if (!it.priceMin) why.push("free");
+    else if (it.priceMin <= budgetCap * 0.4) why.push("well under your budget");
+    if (t.min <= 20) why.push("only " + t.min + " min from " + p.homeShort);
+    else if (t.km > 60) why.push("a proper day trip \u2014 " + t.km + " km");
+    if (E.diffDays(E.today(), occ.d) <= 2) why.push("on " + E.fmtDay(occ.d).toLowerCase());
+    if (it.tags.indexOf("closing soon") > -1) why.push("closing soon");
+
+    return { pct: pct, why: why.slice(0, 3), travel: t, personal: personal, practical: practical, quality: quality };
+  };
+
+  /* ---- feed ---- */
+  E.feed = function (state) {
+    var p = state.profile;
+    var learned = E.learn(state.feedback);
+    var lm = E.learnedMap(learned);
+    var from = E.today(), held = [], rows = [];
+
+    EV.ITEMS.forEach(function (it) {
+      var fin = E.isFinished(it);
+      if (fin) {
+        held.push({ title: it.title, reason: "Finished \u2014 last ran " + E.fmtDayLong(fin), url: it.src.url, domain: E.source(it).domain });
+        return;
+      }
+      if (state.hidden.indexOf(it.id) > -1) {
+        held.push({ title: it.title, reason: "You said this isn't for you", url: it.src.url, domain: E.source(it).domain });
+        return;
+      }
+      if (state.cats.length && state.cats.indexOf(it.cat) < 0) return;
+      if (state.regions && state.regions.length && state.regions.indexOf(E.regionOf(it)) < 0) return;
+      var occ = E.occurrences(it, from, state.horizon, 6).filter(function (o) {
+        return !state.weekdays.length || state.weekdays.indexOf(o.d.getDay()) > -1;
+      });
+      if (!occ.length) return;
+      if (state.freeOnly && it.priceMin > 0) return;
+      var sc = E.score(it, occ[0], p, lm);
+      rows.push({ item: it, occ: occ, next: occ[0], score: sc, source: E.source(it) });
+    });
+
+    (EV.SUPPRESSED || []).forEach(function (s) {
+      held.push({ title: s.title, reason: s.reason, url: s.url, domain: s.src });
+    });
+
+    rows = E.sort(rows, state.sort);
+    return { rows: rows, held: held, learned: learned };
+  };
+
+  E.sort = function (rows, mode) {
+    var r = rows.slice();
+    if (mode === "date") r.sort(function (a, b) { return a.next.d - b.next.d || b.score.pct - a.score.pct; });
+    else if (mode === "near") r.sort(function (a, b) { return a.score.travel.km - b.score.travel.km; });
+    else if (mode === "cheap") r.sort(function (a, b) { return a.item.priceMin - b.item.priceMin || b.score.pct - a.score.pct; });
+    else {
+      r.sort(function (a, b) { return b.score.pct - a.score.pct || a.next.d - b.next.d; });
+      r = E.diversify(r);
+    }
+    return r;
+  };
+
+  /* Stop one category owning the top of the feed: no more than two in a row. */
+  E.diversify = function (rows) {
+    var pool = rows.slice(), out = [], run = 0, last = null, i, pick;
+    while (pool.length) {
+      pick = 0;
+      if (run >= 2) {
+        for (i = 0; i < pool.length; i++) { if (pool[i].item.cat !== last) { pick = i; break; } }
+      }
+      var r = pool.splice(pick, 1)[0];
+      run = r.item.cat === last ? run + 1 : 1;
+      last = r.item.cat;
+      out.push(r);
+    }
+    return out;
+  };
+
+  E.similar = function (it, rows) {
+    return rows.filter(function (r) { return r.item.id !== it.id; }).map(function (r) {
+      var s = (r.item.cat === it.cat ? 3 : 0);
+      r.item.tags.forEach(function (t) { if (it.tags.indexOf(t) > -1) s += 1; });
+      return { r: r, s: s };
+    }).filter(function (x) { return x.s > 1; }).sort(function (a, b) { return b.s - a.s; })
+      .slice(0, 3).map(function (x) { return x.r; });
+  };
+
+  E.whenLine = function (it, occ) {
+    if (it.type === "weekly") {
+      var days = it.weekdays.length === 7 ? "Every day" : "Every " + it.weekdays.map(function (d) { return DOW[d]; }).join(", ");
+      return days + " \u00b7 " + E.clock(it.open) + "\u2013" + E.clock(it.close);
+    }
+    return E.fmtDay(occ.d) + " \u00b7 " + E.clock(occ.open) + "\u2013" + E.clock(occ.close);
+  };
+
+  window.EV.E = E;
+})();
+
+</script>
+<script>
+/* Scout — interface layer. */
+(function () {
+  var E = EV.E, root = document.getElementById("root");
+  var KEY = "scout.v1";
+
+  /* ---------------- state ---------------- */
+  function defaults() {
+    return {
+      onboarded: false, step: 0,
+      profile: {
+        home: EV.HOME.label, homeShort: EV.HOME.label.split(",")[0],
+        lat: EV.HOME.lat, lng: EV.HOME.lng,
+        interests: ["food", "market", "nature", "festival"],
+        budget: 150, booking: "ok"
+      },
+      cats: [], regions: [], weekdays: [], horizon: 14, sort: "match", freeOnly: false,
+      feedback: [], hidden: [], saved: [], imported: [],
+      view: "discover", open: null, menu: false, sheet: null, tab: "profile",
+      cal: null, connect: null, pasted: [], social: false, importing: false
+    };
+  }
+  var S = defaults();
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) {
+      var p = JSON.parse(raw);
+      Object.keys(p).forEach(function (k) { S[k] = p[k]; });
+    }
+  } catch (e) {}
+  if (window.__QA) Object.keys(window.__QA).forEach(function (k) { S[k] = window.__QA[k]; });
+
+  /* Items the person added themselves live in the same pool as ingested ones,
+     so scoring, the feed and the list treat them identically. */
+  function mountImported() {
+    (S.imported || []).forEach(function (it) {
+      if (!E.byId(it.id)) EV.ITEMS.push(it);
+    });
+  }
+  mountImported();
+
+  function save() {
+    var c = {};
+    Object.keys(S).forEach(function (k) { c[k] = S[k]; });
+    c.open = null; c.menu = false; c.sheet = null; c.connect = null; c.cal = null; c.importing = false;
+    try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {}
+  }
+
+  /* ---------------- helpers ---------------- */
+  function esc(s) {
+    return String(s === null || s === undefined ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function initials(str) {
+    var p = String(str).replace(/[^A-Za-z ]/g, " ").trim().split(/\s+/);
+    return ((p[0] || "S")[0] + (p[1] ? p[1][0] : "")).toUpperCase();
+  }
+  function hash(s) {
+    var h = 0, i;
+    for (i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return h;
+  }
+
+  /* A generated poster, not a fake photograph. Used when the source published no
+     image we can legitimately hot-link — nothing here pretends to be a photo of
+     the actual event. */
+  function cover(it, big) {
+    var hue = (EV.CATS[it.cat] && EV.CATS[it.cat].hue) || 200;
+    var h = hash(it.id);
+    var a = "hsl(" + hue + ",26%," + (big ? 30 : 32) + "%)";
+    var b = "hsl(" + ((hue + 34) % 360) + ",30%," + (big ? 52 : 54) + "%)";
+    var g = "g" + h.toString(36);
+    var rings = "", i, cx, cy, r;
+    for (i = 0; i < 3; i++) {
+      cx = 18 + ((h >> (i * 3)) % 66);
+      cy = 20 + ((h >> (i * 5)) % 60);
+      r = 16 + ((h >> (i * 7)) % 30);
+      rings += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r +
+        '" fill="none" stroke="rgba(244,239,228,' + (0.13 + i * 0.05) + ')" stroke-width="' + (0.7 + i * 0.4) + '"/>';
+    }
+    var word = (EV.CATS[it.cat] ? EV.CATS[it.cat].label : it.cat).toUpperCase();
+    return '<svg class="cv" viewBox="0 0 100 64" preserveAspectRatio="none" aria-hidden="true">' +
+      '<defs><linearGradient id="' + g + '" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0" stop-color="' + a + '"/><stop offset="1" stop-color="' + b + '"/>' +
+      '</linearGradient></defs>' +
+      '<rect width="100" height="64" fill="url(#' + g + ')"/>' + rings +
+      '<text x="6" y="58" font-family="Fraunces,Georgia,serif" font-size="5" letter-spacing="1.2" ' +
+      'fill="rgba(244,239,228,.62)">' + esc(word) + '</text></svg>';
+  }
+
+  function media(it, cls, big) {
+    var img = it.img && it.img.url
+      ? '<img src="' + esc(it.img.url) + '" alt="" loading="lazy" ' +
+        'onerror="this.parentNode.classList.add(&quot;failed&quot;)">'
+      : "";
+    return cover(it, big) + img;
+  }
+
+  /* ---------------- calendar export (.ics, no account needed) ---------------- */
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function stamp(d, hhmm) {
+    var t = (hhmm || "09:00").split(":");
+    return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) +
+      "T" + pad(+t[0]) + pad(+t[1]) + "00";
+  }
+  function icsEsc(s) {
+    return String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
+  }
+  function icsFor(rows) {
+    var L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Scout//SEQ//EN", "CALSCALE:GREGORIAN"];
+    rows.forEach(function (r) {
+      var it = r.item, o = r.next;
+      L.push("BEGIN:VEVENT");
+      L.push("UID:" + it.id + "-" + E.iso(o.d) + "@scout");
+      L.push("DTSTAMP:" + stamp(E.today(), "08:00") + "Z");
+      L.push("DTSTART:" + stamp(o.d, o.open));
+      L.push("DTEND:" + stamp(o.d, o.close || o.open));
+      L.push("SUMMARY:" + icsEsc(it.title));
+      L.push("LOCATION:" + icsEsc(it.venue + (it.addr ? ", " + it.addr : "")));
+      L.push("DESCRIPTION:" + icsEsc(it.desc + "\n\nSource: " + it.src.url));
+      L.push("URL:" + it.src.url);
+      L.push("END:VEVENT");
+    });
+    L.push("END:VCALENDAR");
+    return L.join("\r\n");
+  }
+  function download(name, text) {
+    try {
+      var blob = new Blob([text], { type: "text/calendar;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+    } catch (e) {}
+  }
+
+  /* ---------------- feed ---------------- */
+  function currentFeed() { return E.feed(S); }
+
+  function fbOf(id) {
+    var t = null;
+    S.feedback.forEach(function (f) { if (f.id === id) t = f.type; });
+    return t;
+  }
+
+  function tile(r) {
+    var it = r.item, sc = r.score, reg = E.regionLabel(E.regionOf(it));
+    var f = fbOf(it.id), on = S.saved.indexOf(it.id) > -1;
+    var noimg = !(it.img && it.img.url);
+    return '<article class="card">' +
+      '<button class="shot" data-open="' + it.id + '" aria-label="' + esc(it.title) + '">' +
+        media(it, "", false) +
+        '<span class="badge">' + sc.pct + '%<i>match</i></span>' +
+        (on ? '<span class="flag">\u2713 On your list</span>' : "") +
+        (noimg ? '<span class="nosrc">No photo published on ' + esc(r.source.domain) + '</span>' : "") +
+      '</button>' +
+      '<div class="cbody">' +
+        '<p class="cat">' + esc(EV.CATS[it.cat] ? EV.CATS[it.cat].label : it.cat) + ' \u00b7 ' + esc(reg) + '</p>' +
+        '<button class="ctitle" data-open="' + it.id + '">' + esc(it.title) + '</button>' +
+        '<p class="meta">' + esc(E.whenLine(it, r.next)) + '</p>' +
+        '<p class="meta">' + esc(it.venue) + ' \u00b7 ' + sc.travel.min + ' min drive</p>' +
+        (it.approxLoc ? '<p class="warnline">Address not confirmed \u2014 check the source</p>' : "") +
+        '<p class="price">' + esc(E.money(it.priceMin, it.priceMax)) + '</p>' +
+        (sc.why.length ? '<p class="why">' + esc(sc.why.join(" \u00b7 ")) + '</p>' : "") +
+        '<div class="fb">' +
+          '<button class="fbb ' + (f === "save" ? "good" : "") + '" data-fb="save:' + it.id + '">' + (on ? "Saved" : "Save") + '</button>' +
+          '<button class="fbb ' + (f === "up" ? "mid" : "") + '" data-fb="up:' + it.id + '">Interested</button>' +
+          '<button class="fbb ' + (f === "down" ? "bad" : "") + '" data-fb="down:' + it.id + '">Not for me</button>' +
+        '</div>' +
+      '</div>' +
+    '</article>';
+  }
+
+  function chipRow(label, items, activeList, act) {
+    var h = '<div class="crow"><span class="clabel">' + esc(label) + '</span>';
+    items.forEach(function (o) {
+      var on = activeList.indexOf(o.v) > -1;
+      h += '<button class="chip sm ' + (on ? "on" : "") + '" data-' + act + '="' + esc(o.v) + '">' + esc(o.l) + '</button>';
+    });
+    h += "</div>";
+    return h;
+  }
+
+  function discover() {
+    var fd = currentFeed(), rows = fd.rows;
+    var regions = E.REGIONS.map(function (r) { return { v: r.id, l: r.label }; });
+    var days = [1, 2, 3, 4, 5, 6, 0].map(function (d) { return { v: String(d), l: E.DOW[d] }; });
+    var cats = Object.keys(EV.CATS).map(function (k) { return { v: k, l: EV.CATS[k].label }; });
+    var sorts = [{ v: "match", l: "Best match" }, { v: "date", l: "Soonest" }, { v: "near", l: "Closest" }, { v: "cheap", l: "Cheapest" }];
+
+    var h = '<div class="feedhead"><div>' +
+      '<p class="eyebrow">What I\u2019ve found</p>' +
+      '<p class="count">' + rows.length + ' things on in the next ' + S.horizon + ' days</p>' +
+      '<p class="note">Across Brisbane, the Gold Coast, Sunshine Coast, Ipswich and the Scenic Rim. Nothing finished, nothing unverified.</p>' +
+      '</div><div class="chips">' +
+      '<button class="btn sm ghost" data-act="clear">Reset filters</button>' +
+      '</div></div>';
+
+    h += chipRow("Region", regions, S.regions, "rg");
+    h += chipRow("Days", days, S.weekdays.map(String), "wd");
+    h += chipRow("Interest", cats, S.cats, "cat");
+    h += '<div class="crow"><span class="clabel">Sort</span>';
+    sorts.forEach(function (o) {
+      h += '<button class="chip sm ' + (S.sort === o.v ? "on" : "") + '" data-st="' + o.v + '">' + o.l + '</button>';
+    });
+    h += '<button class="chip sm ' + (S.freeOnly ? "on" : "") + '" data-act="free">Free only</button>';
+    h += '<button class="chip sm ' + (S.horizon === 45 ? "on" : "") + '" data-act="horizon">Look 6 weeks out</button>';
+    h += "</div>";
+
+    h += rows.length
+      ? '<div class="grid">' + rows.map(tile).join("") + "</div>"
+      : '<div class="empty">Nothing matches those filters. Try clearing a region or a day.</div>';
+    return h;
+  }
+
+  /* ---------------- my list ---------------- */
+  function savedRows() {
+    var out = [];
+    S.saved.forEach(function (id) {
+      var it = E.byId(id); if (!it) return;
+      if (E.isFinished(it)) return;
+      var occ = E.occurrences(it, E.today(), 120, 3);
+      if (!occ.length) return;
+      out.push({ item: it, next: occ[0], occ: occ, source: E.source(it) });
+    });
+    out.sort(function (a, b) { return a.next.d - b.next.d; });
+    return out;
+  }
+
+  function listView() {
+    var rows = savedRows();
+    var t = E.today(), wk = E.addDays(t, 7);
+    var g = { soon: [], week: [], later: [], any: [] };
+    rows.forEach(function (r) {
+      if (r.item.type === "weekly") g.any.push(r);
+      else if (r.next.d <= E.addDays(t, 2)) g.soon.push(r);
+      else if (r.next.d <= wk) g.week.push(r);
+      else g.later.push(r);
+    });
+
+    var h = '<div class="feedhead"><div>' +
+      '<p class="eyebrow">Your list</p>' +
+      '<p class="count">' + rows.length + ' saved</p>' +
+      '<p class="note">Everything you\u2019ve kept, soonest first \u2014 not tied to any one weekend.</p>' +
+      '</div><div class="chips">' +
+      '<button class="btn sm" data-act="import">Add something you saw</button>' +
+      (rows.length ? '<button class="btn sm pri" data-act="icsall">Add all to calendar</button>' : "") +
+      '</div></div>';
+
+    if (!rows.length) {
+      return h + '<div class="empty">Nothing saved yet. Hit <b>Save</b> on anything in Discover, or add something you spotted on Instagram yourself.</div>';
+    }
+
+    function sec(title, list) {
+      if (!list.length) return "";
+      var s = '<div class="lsec"><h4>' + esc(title) + '</h4><div class="lrows">';
+      list.forEach(function (r) {
+        var it = r.item;
+        s += '<div class="lrow">' +
+          '<div class="lsw">' + cover(it, false) + '</div>' +
+          '<div class="linfo">' +
+            '<b>' + esc(it.title) + (it.mine ? '<span class="mine">added by you</span>' : "") + '</b>' +
+            '<span>' + esc(E.whenLine(it, r.next)) + ' \u00b7 ' + esc(E.money(it.priceMin, it.priceMax)) +
+            ' \u00b7 ' + esc(E.regionLabel(E.regionOf(it))) + '</span>' +
+          '</div>' +
+          '<button class="btn sm ghost" data-open="' + it.id + '">Open</button>' +
+          '<button class="iconb" data-ics="' + it.id + '" title="Add to calendar">\u2637</button>' +
+          '<button class="iconb" data-unsave="' + it.id + '" title="Remove">\u2715</button>' +
+        '</div>';
+      });
+      return s + "</div></div>";
+    }
+
+    h += sec("Next 48 hours", g.soon);
+    h += sec("This week", g.week);
+    h += sec("Further out", g.later);
+    h += sec("On regularly \u2014 go whenever", g.any);
+    return h;
+  }
+
+  /* ---------------- sources ---------------- */
+  var TIER_COPY = {
+    aggregator: ["Aggregators", "Polled on a schedule. These are the pages that list many events at once, which is why Scout watches them and not individual venues."],
+    social: ["Social", "Instagram and TikTok, once you connect them. Read-only, and limited to what each platform\u2019s API actually permits."],
+    manual: ["Your links", "Anything you paste or send in. Parsed once, never crawled."],
+    verify: ["Official pages", "Fetched only to confirm a listing an aggregator surfaced, or to re-check it before it starts. Never crawled daily."]
+  };
+
+  function sourceRows(tier) {
+    var list = EV.SOURCES.filter(function (s) { return s.tier === tier; });
+    if (!list.length) return "";
+    var h = '<div class="scard"><h4>' + esc(TIER_COPY[tier][0]) + '</h4>' +
+      '<p class="cap">' + esc(TIER_COPY[tier][1]) + '</p>' +
+      '<table class="stable"><thead><tr><th>Source</th><th>Region</th><th>Checked</th><th>Status</th></tr></thead><tbody>';
+    list.forEach(function (s) {
+      var live = s.status === "ok";
+      h += "<tr><td><b>" + esc(s.name) + '</b><div class="dom">' + esc(s.domain) + "</div></td>" +
+        "<td>" + esc(s.region === "multi" ? "All regions" : E.regionLabel(s.region)) + "</td>" +
+        "<td>" + esc(s.cadence === "on demand" ? "On demand only" : "Every " + s.cadence) + "</td>" +
+        '<td><span class="stat ' + (live ? "ok" : "off") + '">' + (live ? "\u25cf Live" : "\u25cb Not connected") + "</span>" +
+        (s.tier === "social" && !live ? '<br><button class="btn sm" data-cx="' + s.id + '" style="margin-top:6px">Connect</button>' : "") +
+        "</td></tr>";
+    });
+    return h + "</tbody></table></div>";
+  }
+
+  function sourcesView() {
+    var r = EV.RUN;
+    var h = '<div class="feedhead"><div>' +
+      '<p class="eyebrow">Where this comes from</p>' +
+      '<p class="count">' + r.aggregators + ' aggregators, checked twice a day</p>' +
+      '<p class="note">Scout watches the pages that list many things at once. Individual venue pages are only opened to double-check a specific listing.</p>' +
+      '</div></div>';
+
+    h += '<div class="scard"><h4>Last run</h4>' +
+      '<div class="statrow">' +
+      '<div><b>' + r.sourcesChecked + '</b><span>aggregators checked</span></div>' +
+      '<div><b>' + r.pagesFetched + '</b><span>pages fetched</span></div>' +
+      '<div><b>' + r.candidates + '</b><span>candidates found</span></div>' +
+      '<div><b>' + r.published + '</b><span>published</span></div>' +
+      '<div><b>' + r.suppressed + '</b><span>held back</span></div>' +
+      '<div><b>' + r.verifyFetches + '</b><span>verify fetches</span></div>' +
+      '</div>' +
+      '<p class="cap">' + r.pagesFetched + ' of those fetches were aggregator pages on a schedule. The other ' + r.verifyFetches +
+      ' were one-off checks against an official page for a listing that needed confirming.</p></div>';
+
+    h += '<div class="scard"><h4>Send Scout a link</h4>' +
+      '<p class="cap">Paste anything \u2014 an event page, a venue, a post. Scout reads that one page and nothing else on the domain.</p>' +
+      '<div class="row2" style="margin-top:12px">' +
+      '<input class="inp" id="pasteurl" placeholder="https://…">' +
+      '<button class="btn pri" data-act="paste">Read it</button></div>';
+    if ((S.pasted || []).length) {
+      h += '<div style="margin-top:14px">';
+      S.pasted.forEach(function (p) {
+        h += '<div class="heldrow"><b>' + esc(p.title) + "</b> \u00b7 <span>" + esc(p.note) + "</span></div>";
+      });
+      h += "</div>";
+    }
+    h += "</div>";
+
+    h += sourceRows("aggregator") + sourceRows("social") + sourceRows("manual") + sourceRows("verify");
+
+    if ((EV.SOCIAL || []).length) {
+      h += '<div class="scard"><h4>How a post becomes a listing</h4>' +
+        '<p class="cap">Worked examples, not live posts \u2014 Instagram and TikTok aren\u2019t connected yet.</p>';
+      EV.SOCIAL.forEach(function (s) {
+        h += '<div class="heldrow"><b>' + esc(s.handle) + "</b> \u00b7 <span>" + esc(s.platform) + "</span>" +
+          '<p class="cap">\u201c' + esc(s.caption) + '\u201d</p><ul class="bul">';
+        s.parsed.forEach(function (kv) { h += "<li>" + esc(kv[0]) + ": " + esc(kv[1]) + "</li>"; });
+        h += "</ul>" + (s.match ? "" : '<p class="cap">Not enough in the caption to make a listing \u2014 held back.</p>') + "</div>";
+      });
+      h += "</div>";
+    }
+    return h;
+  }
+
+  /* ---------------- detail ---------------- */
+  function detail(id) {
+    var it = E.byId(id); if (!it) return "";
+    var fd = currentFeed();
+    var row = null;
+    fd.rows.forEach(function (r) { if (r.item.id === id) row = r; });
+    var occ = row ? row.occ : E.occurrences(it, E.today(), 120, 4);
+    var next = occ[0] || { d: E.today(), open: it.open, close: it.close };
+    var src = E.source(it);
+    var sc = row ? row.score : E.score(it, next, S.profile, E.learnedMap(E.learn(S.feedback)));
+    var on = S.saved.indexOf(it.id) > -1;
+    var sims = row ? E.similar(it, fd.rows) : [];
+    var noimg = !(it.img && it.img.url);
+
+    var h = '<div class="modal" role="dialog" aria-label="' + esc(it.title) + '">' +
+      '<button class="close" data-act="closemodal" aria-label="Close">\u2715</button>' +
+      '<div class="mmedia">' + media(it, "", true) + "</div>" +
+      (it.img && it.img.credit ? '<p class="credit">' + esc(it.img.credit) + "</p>"
+        : '<p class="credit">Generated cover \u2014 ' + esc(src.domain) + " publishes no image Scout can legitimately reuse.</p>") +
+      '<p class="cat">' + esc(EV.CATS[it.cat] ? EV.CATS[it.cat].label : it.cat) + " \u00b7 " +
+      esc(E.regionLabel(E.regionOf(it))) + '</p>' +
+      '<h2 class="mtitle">' + esc(it.title) + "</h2>" +
+      '<p class="mdesc">' + esc(it.desc) + "</p>";
+
+    h += '<div class="kv">' +
+      "<div><label>When</label><p>" + esc(E.whenLine(it, next)) + "</p></div>" +
+      "<div><label>Where</label><p>" + esc(it.venue) + "<br>" + esc(it.addr) +
+      (it.approxLoc ? '<br><span class="warnline">Address not confirmed</span>' : "") + "</p></div>" +
+      "<div><label>Price</label><p>" + esc(E.money(it.priceMin, it.priceMax)) + "</p></div>" +
+      "<div><label>Getting there</label><p>" + sc.travel.km + " km \u00b7 about " + sc.travel.min + " min from " + esc(S.profile.homeShort) + "</p></div>" +
+      "<div><label>Booking</label><p>" + esc(it.booking === "required" ? "Required" : it.booking === "recommended" ? "Recommended" : "Just turn up") + "</p></div>" +
+      "<div><label>Checked</label><p>" + esc(it.verified ? "Read from the source on " + it.verified : "Added by you \u2014 unverified") + "</p></div>" +
+      "</div>";
+
+    if (occ.length > 1) {
+      h += '<div class="panelbox"><h4>Next dates</h4><ul class="bul">';
+      occ.slice(0, 4).forEach(function (o) {
+        h += "<li>" + esc(E.fmtDayLong(o.d)) + " \u00b7 " + esc(E.clock(o.open)) + "\u2013" + esc(E.clock(o.close)) + "</li>";
+      });
+      h += "</ul></div>";
+    }
+
+    if (it.facts && it.facts.length) {
+      h += '<div class="panelbox"><h4>From the source</h4><div class="kv tight">';
+      it.facts.forEach(function (kv) {
+        h += "<div><label>" + esc(kv[0]) + "</label><p>" + esc(kv[1]) + "</p></div>";
+      });
+      h += "</div></div>";
+    }
+
+    if (sc.why.length) {
+      h += '<div class="panelbox"><h4>Why Scout picked this</h4><ul>';
+      sc.why.forEach(function (w) { h += "<li>" + esc(w) + "</li>"; });
+      h += "</ul></div>";
+    }
+
+    h += '<div class="panelbox"><h4>Source</h4>' +
+      '<p style="font-size:14px;margin:0"><a href="' + esc(it.src.url) + '" target="_blank" rel="noopener noreferrer">' +
+      esc(src.name) + " \u2192</a></p>" +
+      '<p class="cap">' + esc(it.src.url) + "</p>" +
+      (noimg ? '<p class="cap">No image was published on this page, so Scout generated a cover rather than substituting a stock photo.</p>' : "") +
+      "</div>";
+
+    if (sims.length) {
+      h += '<div class="panelbox"><h4>Similar</h4><div class="simrow">';
+      sims.forEach(function (r) {
+        h += '<button class="simchip" data-open="' + r.item.id + '">' + esc(r.item.title) + "</button>";
+      });
+      h += "</div></div>";
+    }
+
+    h += '<div class="macts">' +
+      '<button class="btn" data-fb="down:' + it.id + '">Not for me</button>' +
+      '<button class="btn" data-fb="expensive:' + it.id + '">Too expensive</button>' +
+      '<button class="btn" data-fb="far:' + it.id + '">Too far</button>' +
+      '<button class="btn right" data-ics="' + it.id + '">Add to calendar</button>' +
+      '<button class="btn pri" data-fb="save:' + it.id + '">' + (on ? "On your list" : "Save") + "</button>" +
+      "</div></div>";
+    return h;
+  }
+
+  /* ---------------- onboarding ---------------- */
+  function onboard() {
+    var cats = Object.keys(EV.CATS).map(function (k) { return { v: k, l: EV.CATS[k].label }; });
+    var h = '<div class="center">';
+    if (S.step === 0) {
+      h += '<p class="eyebrow">Scout</p>' +
+        '<h1 class="h1">I\u2019ll watch what\u2019s on around South East Queensland so you don\u2019t have to.</h1>' +
+        '<p class="sub">Two questions, then a quick taste check. You can change any of it later, and skip whatever you like.</p>' +
+        '<div class="field"><label>Where do you start from?</label>' +
+        '<input class="inp" id="homein" value="' + esc(S.profile.home) + '"></div>' +
+        '<div class="field"><label>How far do you usually go? This is a preference, not a limit \u2014 Scout will still show you a great thing three hours away.</label>' +
+        '<div class="chips">' +
+        [["near", "Close to home"], ["any", "Distance doesn\u2019t bother me"]].map(function (o) {
+          return '<button class="chip ' + ((S.profile.travelPref || "any") === o[0] ? "on" : "") + '" data-tp="' + o[0] + '">' + o[1] + "</button>";
+        }).join("") + "</div></div>" +
+        '<div class="macts"><button class="btn ghost" data-act="skipall">Skip, use sensible defaults</button>' +
+        '<button class="btn pri right" data-act="next">Next</button></div>';
+    } else if (S.step === 1) {
+      h += '<p class="eyebrow">Step 2 of 2</p>' +
+        '<h1 class="h1">What are you into?</h1>' +
+        '<p class="sub">Pick a few. These only set the starting point \u2014 what you save and skip teaches Scout far more than this screen does.</p>' +
+        '<div class="field"><div class="chips">' +
+        cats.map(function (o) {
+          return '<button class="chip ' + (S.profile.interests.indexOf(o.v) > -1 ? "on" : "") + '" data-int="' + o.v + '">' + esc(o.l) + "</button>";
+        }).join("") + "</div></div>" +
+        '<div class="field"><label>Rough budget per outing</label><div class="chips">' +
+        [[40, "Under $40"], [90, "Up to $90"], [150, "Up to $150"], [400, "Whatever it takes"]].map(function (o) {
+          return '<button class="chip ' + (S.profile.budget === o[0] ? "on" : "") + '" data-bud="' + o[0] + '">' + o[1] + "</button>";
+        }).join("") + "</div></div>" +
+        '<div class="field"><label>Booking ahead</label><div class="chips">' +
+        [["ok", "Happy to book"], ["avoid", "Prefer to just turn up"]].map(function (o) {
+          return '<button class="chip ' + (S.profile.booking === o[0] ? "on" : "") + '" data-bk="' + o[0] + '">' + o[1] + "</button>";
+        }).join("") + "</div></div>" +
+        '<div class="macts"><button class="btn ghost" data-act="back">Back</button>' +
+        '<button class="btn pri right" data-act="next">Quick taste check</button></div>';
+    }
+    return h + "</div>";
+  }
+
+  /* ---------------- taste check ----------------
+     Reactions to real listings, one per category, so the very first feed is
+     already shaped by something learned instead of starting cold. */
+  function calSet() {
+    var seen = {}, out = [], t = E.today();
+    EV.ITEMS.forEach(function (it) {
+      if (out.length >= 8 || seen[it.cat] || it.mine) return;
+      if (E.isFinished(it)) return;
+      if (!E.occurrences(it, t, 45, 1).length) return;
+      seen[it.cat] = 1;
+      out.push(it);
+    });
+    return out;
+  }
+
+  function calibrate() {
+    var set = calSet(), i = S.cal.i, it = set[i];
+    if (!it) return "";
+    var h = '<div class="center"><p class="eyebrow">Last thing</p>' +
+      '<h1 class="h1">A quick taste check \u2014 ' + set.length + ' real listings.</h1>' +
+      '<p class="sub">This teaches Scout faster than any settings screen. React honestly, skip anything you\u2019re unsure about.</p>' +
+      '<div class="dots">' +
+      set.map(function (x, n) {
+        return '<span class="dot ' + (n < i ? "done" : n === i ? "now" : "") + '"></span>';
+      }).join("") + "</div>" +
+      '<div class="calcard"><div class="calmedia">' + media(it, "", true) + "</div>" +
+      '<div class="calbody"><p class="cat">' + esc(EV.CATS[it.cat].label) + " \u00b7 " +
+      esc(E.regionLabel(E.regionOf(it))) + " \u00b7 " + esc(E.money(it.priceMin, it.priceMax)) + "</p>" +
+      '<h3 class="h3">' + esc(it.title) + "</h3>" +
+      '<p class="mdesc" style="margin:0">' + esc(it.desc) + "</p></div></div>" +
+      '<div class="calacts">' +
+      '<button class="btn ghost" data-cal="skip">Skip</button>' +
+      '<button class="btn" data-cal="down">Not for me</button>' +
+      '<button class="btn" data-cal="up">Interested</button>' +
+      '<button class="btn pri" data-cal="save">Love it</button>' +
+      "</div>" +
+      '<p class="note">' + (i + 1) + " of " + set.length + "</p></div>";
+    return h;
+  }
+
+  /* ---------------- settings ---------------- */
+  function settings() {
+    var fd = currentFeed();
+    var tabs = [["profile", "Profile"], ["learned", "What Scout learned"], ["held", "Held back"], ["activity", "Activity"]];
+    var h = '<div class="modal wide">' +
+      '<button class="close" data-act="closeset" aria-label="Close">\u2715</button>' +
+      '<h2 class="mtitle" style="font-size:22px">Settings</h2><div class="tabs">';
+    tabs.forEach(function (t) {
+      h += '<button class="tab ' + (S.tab === t[0] ? "on" : "") + '" data-tab="' + t[0] + '">' + t[1] + "</button>";
+    });
+    h += "</div>";
+
+    if (S.tab === "profile") {
+      var cats = Object.keys(EV.CATS);
+      h += '<div class="field"><label>Starting point</label><input class="inp" id="homeset" value="' + esc(S.profile.home) + '"></div>' +
+        '<div class="field"><label>Interests</label><div class="chips">' +
+        cats.map(function (k) {
+          return '<button class="chip sm ' + (S.profile.interests.indexOf(k) > -1 ? "on" : "") + '" data-int="' + k + '">' + esc(EV.CATS[k].label) + "</button>";
+        }).join("") + "</div></div>" +
+        '<div class="field"><label>Budget per outing</label><div class="chips">' +
+        [[40, "Under $40"], [90, "Up to $90"], [150, "Up to $150"], [400, "Whatever it takes"]].map(function (o) {
+          return '<button class="chip sm ' + (S.profile.budget === o[0] ? "on" : "") + '" data-bud="' + o[0] + '">' + o[1] + "</button>";
+        }).join("") + "</div></div>" +
+        '<div class="field"><label>Booking</label><div class="chips">' +
+        [["ok", "Happy to book"], ["avoid", "Prefer to just turn up"]].map(function (o) {
+          return '<button class="chip sm ' + (S.profile.booking === o[0] ? "on" : "") + '" data-bk="' + o[0] + '">' + o[1] + "</button>";
+        }).join("") + "</div></div>" +
+        '<p class="cap">Scout has no maximum travel time. Distance nudges the ranking, it never hides anything.</p>' +
+        '<div class="macts"><button class="btn ghost" data-act="reset">Start fresh</button>' +
+        '<button class="btn pri right" data-act="saveset">Save</button></div>';
+    } else if (S.tab === "learned") {
+      var L = fd.learned;
+      if (!L.length) {
+        h += '<p class="sub">Nothing learned yet. Save or skip a few things and patterns will show up here \u2014 with the evidence behind them.</p>';
+      } else {
+        h += '<p class="sub">Everything Scout thinks it knows about you, and how sure it is. Remove anything that\u2019s wrong.</p>';
+        L.slice(0, 12).forEach(function (l) {
+          var pos = l.score > 0;
+          h += '<div class="learn"><span style="flex:1">' +
+            (pos ? "You like " : "You avoid ") + "<b>" + esc(l.label) + "</b>" +
+            ' <span class="dom">from ' + l.n + " reaction" + (l.n === 1 ? "" : "s") + "</span></span>" +
+            '<span class="bar"><i style="width:' + Math.round(l.conf * 100) + '%"></i></span>' +
+            '<button class="btn sm ghost" data-unlearn="' + esc(l.key) + '">Forget</button></div>';
+        });
+      }
+    } else if (S.tab === "held") {
+      h += '<p class="sub">Scout found these and deliberately did not show them. This list is the whole point \u2014 you can check the calls it made.</p>';
+      fd.held.forEach(function (x) {
+        h += '<div class="heldrow"><b>' + esc(x.title) + "</b> \u00b7 <span>" + esc(x.reason) + "</span>" +
+          (x.url ? ' \u00b7 <a href="' + esc(x.url) + '" target="_blank" rel="noopener noreferrer">' + esc(x.domain || "source") + " \u2192</a>" : "") +
+          "</div>";
+      });
+    } else {
+      var r = EV.RUN;
+      h += '<p class="sub">Last run started ' + esc(r.startedAt.replace("T", " at ").slice(0, 19)) + ".</p>" +
+        '<div class="statrow">' +
+        "<div><b>" + r.sourcesChecked + "</b><span>aggregators checked</span></div>" +
+        "<div><b>" + r.pagesFetched + "</b><span>pages fetched</span></div>" +
+        "<div><b>" + r.candidates + "</b><span>candidates</span></div>" +
+        "<div><b>" + r.published + "</b><span>published</span></div>" +
+        "<div><b>" + r.suppressed + "</b><span>held back</span></div>" +
+        "<div><b>" + r.needsReview + "</b><span>need review</span></div>" +
+        "</div>" +
+        '<p class="cap">Aggregators are polled on a schedule. Official venue pages were fetched ' + r.verifyFetches +
+        ' times, only to confirm specific listings.</p>' +
+        '<div class="macts" style="margin-top:16px"><button class="btn" data-act="rerun">Run a check now</button></div>';
+    }
+    return h + "</div>";
+  }
+
+  /* ---------------- connect sheet ---------------- */
+  var SOCIAL_COPY = {
+    ig: {
+      name: "Instagram",
+      blurb: "Scout reads public posts through Instagram\u2019s official Graph API. That API is narrower than people expect, so here is exactly what it can and cannot do.",
+      reads: ["Public posts carrying hashtags you nominate, like #brisbaneevents",
+        "Captions, permalinks and timestamps from those posts",
+        "Posts from business accounts you name directly"],
+      limits: ["No following feed, no DMs, no private accounts \u2014 the API does not expose them",
+        "Hashtag search is capped at 30 unique hashtags per rolling 7 days",
+        "Video posts using licensed audio omit the media URL, so those get a generated cover"]
+    },
+    tiktok: {
+      name: "TikTok",
+      blurb: "TikTok\u2019s open APIs are far more restricted. Scout uses the parts that are actually available to an app like this.",
+      reads: ["Videos you save or send to Scout yourself", "Captions and the public embed for any link you paste",
+        "Your own posted videos, if you authorise it"],
+      limits: ["The Research API is licensed for non-commercial research only",
+        "There is no general keyword search for third-party apps",
+        "Pasting a link works today and needs no connection at all"]
+    }
+  };
+
+  function connectSheet() {
+    var c = SOCIAL_COPY[S.connect === "tiktok" ? "tiktok" : "ig"];
+    return '<div class="modal">' +
+      '<button class="close" data-act="cxclose" aria-label="Close">\u2715</button>' +
+      '<p class="eyebrow">Connect</p><h2 class="mtitle">' + esc(c.name) + "</h2>" +
+      '<p class="mdesc">' + esc(c.blurb) + "</p>" +
+      '<div class="panelbox"><h4>What Scout will read</h4><ul>' +
+      c.reads.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>" +
+      '<div class="panelbox"><h4>What it cannot do</h4><ul>' +
+      c.limits.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>" +
+      '<div class="macts"><button class="btn ghost" data-act="cxclose">Cancel</button>' +
+      '<button class="btn pri right" data-act="cxgo">Continue to ' + esc(c.name) + "</button></div></div>";
+  }
+
+  /* ---------------- add-it-yourself ----------------
+     The honest version of "pull from Instagram": you hand Scout what you saw.
+     It is stored as yours, marked unverified, and never dressed up as ingested. */
+  function importModal() {
+    return '<div class="modal">' +
+      '<button class="close" data-act="impclose" aria-label="Close">\u2715</button>' +
+      '<p class="eyebrow">Add something you saw</p>' +
+      '<h2 class="mtitle">Spotted something on Instagram or TikTok?</h2>' +
+      '<p class="mdesc">Put in what you know. Scout saves it to your list marked as yours and unverified \u2014 it will not invent a date, a price or a photo you did not give it.</p>' +
+      '<div class="field"><label>What is it?</label><input class="inp" id="impt" placeholder="Twilight market at the old power station"></div>' +
+      '<div class="field"><label>Where?</label><input class="inp" id="impv" placeholder="Venue or suburb"></div>' +
+      '<div class="field"><label>Date, if you know it</label><input class="inp" id="impd" placeholder="2026-09-19"></div>' +
+      '<div class="field"><label>Link, if you have one</label><input class="inp" id="impu" placeholder="https://…"></div>' +
+      '<div class="field"><label>Interest</label><div class="chips">' +
+      Object.keys(EV.CATS).map(function (k) {
+        return '<button class="chip sm ' + (S.impCat === k ? "on" : "") + '" data-impcat="' + k + '">' + esc(EV.CATS[k].label) + "</button>";
+      }).join("") + "</div></div>" +
+      '<div class="macts"><button class="btn ghost" data-act="impclose">Cancel</button>' +
+      '<button class="btn pri right" data-act="impsave">Save to my list</button></div></div>';
+  }
+
+  /* ---------------- shell ---------------- */
+  function header() {
+    var nav = [["discover", "Discover"], ["list", "My list"], ["sources", "Sources"]];
+    var h = '<header class="hdr"><div class="hdrin">' +
+      '<span class="brand">' +
+      '<svg class="mark" viewBox="0 0 28 28" aria-hidden="true">' +
+      '<circle cx="14" cy="14" r="12.4" fill="none" stroke="#1F4C4A" stroke-width="1.5"/>' +
+      '<path d="M18.6 9.4 12.2 12.2 9.4 18.6 15.8 15.8Z" fill="#D99A2B"/>' +
+      "</svg>Scout</span>" +
+      '<nav class="nav">';
+    nav.forEach(function (n) {
+      var c = n[0] === "list" && S.saved.length ? ' <span class="ct">' + S.saved.length + "</span>" : "";
+      h += '<button class="navb ' + (S.view === n[0] ? "on" : "") + '" data-view="' + n[0] + '">' + n[1] + c + "</button>";
+    });
+    h += '</nav><span class="spacer"></span><div class="pwrap">' +
+      '<button class="avatar" data-act="menu" aria-label="Your account">' + esc(initials(S.profile.home)) + "</button>";
+    if (S.menu) {
+      h += '<div class="menu">' +
+        '<div class="mhead"><b>' + esc(S.profile.home) + "</b><span>" + S.profile.interests.length +
+        " interests \u00b7 " + S.feedback.length + " reactions</span></div>" +
+        '<button class="menui" data-set="profile">Profile &amp; preferences</button>' +
+        '<button class="menui" data-set="learned">What Scout learned</button>' +
+        '<button class="menui" data-set="held">Held back<span class="k">' + (EV.RUN.suppressed + S.hidden.length) + "</span></button>" +
+        '<button class="menui" data-set="activity">Agent activity</button>' +
+        '<div class="mdiv"></div>' +
+        '<button class="menui" data-view="sources">Sources</button>' +
+        "</div>";
+    }
+    return h + "</div></div></header>";
+  }
+
+  function render() {
+    var body;
+    if (!S.onboarded) {
+      body = S.cal ? calibrate() : onboard();
+      root.innerHTML = body;
+      return;
+    }
+    if (S.view === "list") body = listView();
+    else if (S.view === "sources") body = sourcesView();
+    else body = discover();
+
+    var overlay = "";
+    if (S.open) overlay = '<div class="backdrop" data-act="closemodal">' + detail(S.open) + "</div>";
+    else if (S.sheet) overlay = '<div class="backdrop" data-act="closeset">' + settings() + "</div>";
+    else if (S.connect) overlay = '<div class="backdrop" data-act="cxclose">' + connectSheet() + "</div>";
+    else if (S.importing) overlay = '<div class="backdrop" data-act="impclose">' + importModal() + "</div>";
+
+    root.innerHTML = header() + '<main class="wrap">' + body + "</main>" + overlay;
+  }
+
+  /* ---------------- events ---------------- */
+  function toggle(list, v) {
+    var i = list.indexOf(v);
+    if (i > -1) list.splice(i, 1); else list.push(v);
+  }
+  function react(id, type) {
+    S.feedback = S.feedback.filter(function (f) { return f.id !== id; });
+    S.feedback.push({ id: id, type: type, at: E.iso(E.today()) });
+    if (type === "save") { if (S.saved.indexOf(id) < 0) S.saved.push(id); }
+    if (type === "down") {
+      if (S.hidden.indexOf(id) < 0) S.hidden.push(id);
+      S.saved = S.saved.filter(function (x) { return x !== id; });
+    }
+  }
+  function icsOne(id) {
+    var it = E.byId(id); if (!it) return;
+    var occ = E.occurrences(it, E.today(), 120, 1);
+    if (!occ.length) return;
+    download(id + ".ics", icsFor([{ item: it, next: occ[0] }]));
+  }
+  function val(id) {
+    var el = document.getElementById(id);
+    return el ? el.value.trim() : "";
+  }
+
+  document.addEventListener("click", function (ev) {
+    var t = ev.target.closest(
+      "[data-view],[data-act],[data-open],[data-fb],[data-rg],[data-wd],[data-cat],[data-st],[data-int],[data-bud],[data-bk],[data-tp],[data-tab],[data-set],[data-unlearn],[data-cal],[data-cx],[data-ics],[data-unsave],[data-impcat]"
+    );
+    if (!t) return;
+    var d = t.dataset;
+
+    if (d.act === "closemodal" || d.act === "closeset" || d.act === "cxclose" || d.act === "impclose") {
+      if (ev.target !== t && t === ev.target.closest(".backdrop")) return;
+    }
+    if (t.classList.contains("backdrop") && ev.target !== t) return;
+
+    ev.preventDefault();
+
+    if (d.view) { S.view = d.view; S.menu = false; S.open = null; }
+    else if (d.open) { S.open = d.open; }
+    else if (d.fb) {
+      var parts = d.fb.split(":");
+      react(parts[1], parts[0]);
+      if (parts[0] === "down") S.open = null;
+    }
+    else if (d.rg) { toggle(S.regions, d.rg); }
+    else if (d.wd) { toggle(S.weekdays, +d.wd); }
+    else if (d.cat) { toggle(S.cats, d.cat); }
+    else if (d.st) { S.sort = d.st; }
+    else if (d.int) { toggle(S.profile.interests, d.int); }
+    else if (d.bud) { S.profile.budget = +d.bud; }
+    else if (d.bk) { S.profile.booking = d.bk; }
+    else if (d.tp) { S.profile.travelPref = d.tp; }
+    else if (d.tab) { S.tab = d.tab; }
+    else if (d.set) { S.sheet = 1; S.tab = d.set; S.menu = false; }
+    else if (d.unlearn) { 
+      var k = d.unlearn;
+      S.feedback = S.feedback.filter(function (f) {
+        var it = E.byId(f.id);
+        if (!it) return true;
+        if (k.indexOf("cat:") === 0) return "cat:" + it.cat !== k;
+        if (k.indexOf("tag:") === 0) return (it.tags || []).indexOf(k.slice(4)) < 0;
+        return true;
+      });
+    }
+    else if (d.cx) { S.connect = d.cx; }
+    else if (d.ics) { icsOne(d.ics); return; }
+    else if (d.unsave) { S.saved = S.saved.filter(function (x) { return x !== d.unsave; }); }
+    else if (d.impcat) { S.impCat = d.impcat; }
+    else if (d.cal) {
+      var set = calSet(), cur = set[S.cal.i];
+      if (cur && d.cal !== "skip") react(cur.id, d.cal);
+      if (S.cal.i + 1 >= set.length) {
+        S.cal = null; S.onboarded = true; S.view = "discover";
+      } else {
+        S.cal.i += 1;
+      }
+    }
+    else if (d.act) {
+      var a = d.act;
+      if (a === "menu") S.menu = !S.menu;
+      else if (a === "closemodal") S.open = null;
+      else if (a === "closeset") { S.sheet = null; }
+      else if (a === "cxclose") S.connect = null;
+      else if (a === "impclose") S.importing = false;
+      else if (a === "import") S.importing = true;
+      else if (a === "clear") { S.regions = []; S.weekdays = []; S.cats = []; S.freeOnly = false; S.sort = "match"; S.horizon = 14; }
+      else if (a === "free") S.freeOnly = !S.freeOnly;
+      else if (a === "horizon") S.horizon = S.horizon === 45 ? 14 : 45;
+      else if (a === "next") {
+        if (S.step === 0) {
+          var hv = val("homein");
+          if (hv) { S.profile.home = hv; S.profile.homeShort = hv.split(",")[0]; }
+          S.step = 1;
+        } else {
+          S.cal = { i: 0 };
+        }
+      }
+      else if (a === "back") S.step = 0;
+      else if (a === "skipall") { S.cal = { i: 0 }; }
+      else if (a === "saveset") {
+        var hs = val("homeset");
+        if (hs) { S.profile.home = hs; S.profile.homeShort = hs.split(",")[0]; }
+        S.sheet = null;
+      }
+      else if (a === "reset") {
+        try { localStorage.removeItem(KEY); } catch (e) {}
+        S = defaults();
+      }
+      else if (a === "rerun") { S.sheet = null; }
+      else if (a === "cxgo") {
+        var id = S.connect;
+        EV.SOURCES.forEach(function (s) {
+          if (s.id === id) { s.status = "ok"; s.lastRun = "2026-09-02T12:55:00+10:00"; }
+        });
+        S.social = true; S.connect = null; S.view = "sources";
+      }
+      else if (a === "paste") {
+        var u = val("pasteurl");
+        if (u) {
+          var dom = u.replace(/^https?:\/\//, "").split("/")[0];
+          var hit = null;
+          EV.ITEMS.forEach(function (it) {
+            if (!hit && it.src && it.src.url.indexOf(dom) > -1) hit = it;
+          });
+          if (hit) {
+            if (S.saved.indexOf(hit.id) < 0) S.saved.push(hit.id);
+            S.pasted.unshift({ title: hit.title, note: "matched a listing Scout already has \u2014 saved to your list" });
+          } else {
+            S.pasted.unshift({ title: dom, note: "queued for review \u2014 Scout will read this one page and nothing else on the domain" });
+          }
+        }
+      }
+      else if (a === "impsave") {
+        var title = val("impt");
+        if (title) {
+          var dt = val("impd"), venue = val("impv") || "Location not given", link = val("impu");
+          var nid = "mine-" + hash(title + dt).toString(36);
+          var item = {
+            id: nid, title: title, cat: S.impCat || "festival", mine: true,
+            venue: venue, addr: venue, lat: EV.HOME.lat, lng: EV.HOME.lng, approxLoc: true,
+            priceMin: null, priceMax: null, booking: "none", indoor: false, effort: 1,
+            tags: ["added by you"],
+            src: { id: "inbox", url: link || "" },
+            verified: null, confidence: 0.4,
+            desc: "You added this yourself. Scout has not verified the date, price or location \u2014 check the source before you go.",
+            facts: [["Added", "by you on " + E.iso(E.today())]]
+          };
+          if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+            item.type = "dated";
+            item.dates = [{ d: dt, open: "10:00", close: "14:00" }];
+          } else {
+            item.type = "season";
+            item.from = E.iso(E.today());
+            item.to = E.iso(E.addDays(E.today(), 90));
+            item.open = "10:00"; item.close = "14:00";
+            item.facts.push(["Date", "not given \u2014 saved as an open idea"]);
+          }
+          EV.ITEMS.push(item);
+          S.imported.push(item);
+          S.saved.push(nid);
+          S.importing = false;
+          S.view = "list";
+        }
+      }
+    }
+
+    save();
+    render();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (S.open || S.sheet || S.connect || S.importing || S.menu) {
+      S.open = null; S.sheet = null; S.connect = null; S.importing = false; S.menu = false;
+      render();
+    }
+  });
+
+  render();
+})();
+
+</script>
+</body>
+</html>
