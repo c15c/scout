@@ -1,0 +1,15 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+* {
+  @apply box-border;
+}
+
+body {
+  @apply bg-white text-gray-900;
+}
+
+a {
+  @apply text-blue-600 hover:underline;
+}
