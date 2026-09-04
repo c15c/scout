@@ -8,12 +8,34 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
-    const limit = parseInt(searchParams.get('limit') || '50');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50', 10) || 50, 100);
+
+    // Single discovery lookup (detail view).
+    if (id) {
+      const { data, error } = await supabase
+        .from('discoveries')
+        .select('*')
+        .eq('id', id)
+        .eq('status', 'published')
+        .single();
+      if (error) throw error;
+      return NextResponse.json(data);
+    }
+
+    // Upcoming only - a finished event must never appear in the feed.
+    // weekly/venue items are recurring and always current; dated/season items
+    // qualify while their last day (ends_on, or starts_on when single-day)
+    // is today or later.
+    const today = new Date().toISOString().slice(0, 10);
+    const upcoming =
+      'kind.in.(weekly,venue),ends_on.gte.' + today +
+      ',and(ends_on.is.null,starts_on.gte.' + today + ')';
 
     const { data, error } = await supabase
       .from('discoveries')
       .select('*')
       .eq('status', 'published')
+      .or(upcoming)
       .order('starts_on', { ascending: true })
       .limit(limit);
 
